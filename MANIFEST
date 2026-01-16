@@ -1,0 +1,25 @@
+# LFAS Protocol v4.1-RC Official Release
+
+**Repository:** `[Your-New-Repo-Name]`
+**Status:** Release Candidate (RC)
+**Purpose:** Authoritative specification for the Listen First, Act Second protocol.
+
+## Core Artifacts
+
+1.  **`/specs/v4.1-RC/lfas_v41_MASTER_FINAL.json`**
+    *   The complete architectural Knowledge Graph.
+    *   Contains all protocol Phases, Layers, Detectors (D1-D8), Failure Modes, and enforcement logic.
+    *   Schema-locked edges (`{"from", "to", "rel"}`).
+
+2.  **`/specs/v4.1-RC/GENERATION_RULES.md`**
+    *   Instructions for building specific enforcement graphs from the Master Graph.
+    *   Includes example for financial crisis scenario.
+
+## How to Use This Release
+1.  Use the `MASTER_FINAL.json` as the blueprint for any LFAS-compliant system.
+2.  Apply the `GENERATION_RULES` to create scenario-specific prompt graphs.
+3.  This release supersedes all previous versions and drafts.
+
+## Next Phase (v4.1 Stable)
+*   Formal verification of graph integrity.
+*   Development of the automated KG Builder tool.
