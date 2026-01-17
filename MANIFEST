@@ -1,25 +1,66 @@
-# LFAS Protocol v4.1-RC Official Release
+# LFAS Protocol v4.1-RC — Official Release
 
-**Repository:** `[Your-New-Repo-Name]`
-**Status:** Release Candidate (RC)
-**Purpose:** Authoritative specification for the Listen First, Act Second protocol.
+**Repository:** `LFAS-protocol-v4.1-RC_Official`  
+**Status:** Release Candidate (RC)  
+**Purpose:** Authoritative specification for the Listen First, Act Second (LFAS) safety protocol.
+
+**Version:** 4.1-RC  
+**Release Date:** December 2024  
+**Lineage:** Evolved from v2.1 (Authorship) → v3.4 (Policy) → v3.6 (Calibration) → v4.0 (Schema) → v4.1-RC (Detectors)
+
+---
 
 ## Core Artifacts
 
-1.  **`/specs/v4.1-RC/lfas_v41_MASTER_FINAL.json`**
-    *   The complete architectural Knowledge Graph.
-    *   Contains all protocol Phases, Layers, Detectors (D1-D8), Failure Modes, and enforcement logic.
-    *   Schema-locked edges (`{"from", "to", "rel"}`).
+### 1. **`/specs/v4.1-RC/blueprint.json`**
+- **The authoritative Master Knowledge Graph blueprint** (41 nodes, 8 detectors, all safety layers)
+- Contains: Phases (LISTEN→REFLECT→WAIT→ACT→ACKNOWLEDGE), Layers (L1-L41), Detectors (D1-D8), Failure Modes (FM#29-#45), Gates, Rules
+- Version-locked: `4.1-RC`
+- Status: Engine-ready, audit-validated
+- **Internal Identifier:** `LFAS_PROTOCOL_V4_1_RC_OFFICIAL_BLUEPRINT`
+- **Warning:** Do not use outside LFAS context without full protocol documentation
 
-2.  **`/specs/v4.1-RC/GENERATION_RULES.md`**
-    *   Instructions for building specific enforcement graphs from the Master Graph.
-    *   Includes example for financial crisis scenario.
+### 2. **`/specs/v4.1-RC/generation_rules.md`**
+- Official instructions for building scenario-specific enforcement graphs from the master blueprint
+- Includes: Rule taxonomy, scenario templates (financial crisis, medical emergency, legal analysis), edge case handling
+- Cross-references `blueprint.json` nodes and detectors
+
+### 3. **`/LFAS_v4.1-RC_Visual_Summary.md`**
+- Human-readable proof: Protocol overview, Mermaid diagram, component tables, real-world examples
+- Press-ready and stakeholder-accessible
+- Purpose: Non-technical communication layer
+
+### 4. **`/CHANGELOG.md`**
+- Complete version history v2.1 → v4.1-RC
+- Documents what changed, why, and how components evolved
+- Traces continuity of core loop and five pillars across all versions
+
+### 5. **`/VERSION_MATRIX.md`**
+- Component continuity heatmap showing which features existed in each version
+- Identifies v3.8 as reconstructed (internal bridge build)
+- Confirms 100% preservation of core loop and guarantees
+
+### 6. **`/IMPLEMENTATION_CHECKLIST.md`**
+- Validation gates for v4.1 Stable promotion
+- 4-phase checklist: Specification Integrity → Functional Testing → Cross-Reference Validation → External Review
+- Sign-off matrix for formal approval
+
+### 7. **`/ROADMAP.md`**
+- v4.1-RC status (complete)
+- v4.1 Stable next steps (verification, builder tool, test suite)
+- Future versions and implementation timeline
+
+---
 
 ## How to Use This Release
-1.  Use the `MASTER_FINAL.json` as the blueprint for any LFAS-compliant system.
-2.  Apply the `GENERATION_RULES` to create scenario-specific prompt graphs.
-3.  This release supersedes all previous versions and drafts.
 
-## Next Phase (v4.1 Stable)
-*   Formal verification of graph integrity.
-*   Development of the automated KG Builder tool.
+1. Use `blueprint.json` as the authoritative graph for any LFAS-compliant system
+2. Apply `generation_rules.md` to create scenario-specific enforcement graphs
+3. Reference `LFAS_v4.1-RC_Visual_Summary.md` for stakeholder communication
+4. Use `CHANGELOG.md` and `VERSION_MATRIX.md` to understand protocol evolution
+5. Follow `IMPLEMENTATION_CHECKLIST.md` for v4.1 Stable validation
+
+---
+
+## Repository Structure
+
