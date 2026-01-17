@@ -64,3 +64,34 @@
 
 ## Repository Structure
 
+LFAS-protocol-v4.1-RC_Official/
+├── MANIFEST.md (this file)
+├── CHANGELOG.md (version history)
+├── VERSION_MATRIX.md (component continuity)
+├── IMPLEMENTATION_CHECKLIST.md (v4.1 Stable gates)
+├── LFAS_v4.1-RC_Visual_Summary.md (human-readable proof)
+├── ROADMAP.md (next steps)
+└── specs/
+└── v4.1-RC/
+├── blueprint.json (MASTER: 41 nodes, 8 detectors)
+└── generation_rules.md (scenario graph generation rules)
+
+
+---
+
+## Next Phase: v4.1 Stable
+
+- [ ] Graph integrity verification (node/edge validation)
+- [ ] Automated KG Builder tool (CLI or web)
+- [ ] Comprehensive test suite for generated scenario graphs
+- [ ] Formal specification lock
+
+See `IMPLEMENTATION_CHECKLIST.md` for detailed validation gates.
+
+---
+
+## License & Attribution
+
+**LFAS Protocol v4.1-RC**  
+Authoritative specification. Version-locked. Audit-ready.  
+*See CHANGELOG.md for full attribution and evolution history.*
