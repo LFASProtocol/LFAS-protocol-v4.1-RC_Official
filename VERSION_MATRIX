@@ -1,0 +1,129 @@
+# LFAS Component Continuity Matrix (v2.1 → v4.1-RC)
+
+**Purpose:** Trace which protocol components persisted, evolved, or were newly introduced across all versions. Confirms that the Core Loop and Five Pillars have never changed.
+
+---
+
+## Legend
+
+- 🟩 **Implemented** — Feature is fully present and active in this version
+- 🟨 **Partial** — Feature is present but conditional or incomplete
+- 🟧 **Reconstructed** — Feature inferred from internal references (v3.8 only; not directly documented)
+- ⬜ **Absent** — Feature not yet introduced in this version
+
+---
+
+## Component Evolution Matrix
+
+| Component / Feature | v2.1 | v3.4 | v3.5 | v3.6 | v3.8\* | v4.0 | v4.1-RC |
+|---|---|---|---|---|---|---|---|
+| **Core Loop (L→R→W→A→Ack)** | 🟩 | 🟩 | 🟩 | 🟩 | 🟩 | 🟩 | 🟩 |
+| **Five Pillars** | 🟩 | 🟩 | 🟩 | 🟩 | 🟩 | 🟩 | 🟩 |
+| **Core Guarantee** | 🟩 | 🟩 | 🟩 | 🟩 | 🟩 | 🟩 | 🟩 |
+| **Breach Reset Protocol** | 🟩 | 🟩 | 🟩 | 🟩 | 🟩 | 🟩 | 🟩 |
+| **Failure Modes (FM#)** | 🟩 | 🟩 | 🟩 | 🟩 | 🟩 | 🟩 | 🟩 |
+| **Cultural Intent Layer (CIL)** | ⬜ | 🟩 | 🟩 | 🟩 | 🟩 | 🟩 | 🟩 |
+| **Transparency Tiers (TTS)** | ⬜ | 🟩 | 🟩 | 🟩 | 🟩 | 🟩 | 🟩 |
+| **High-Stakes Mode (HSM)** | ⬜ | 🟩 | 🟩 | 🟩 | 🟩 | 🟩 | 🟩 |
+| **Defensive Architecture (11 locks)** | ⬜ | 🟩 | 🟩 | 🟩 | 🟩 | 🟩 | 🟩 |
+| **Softening Layer / Norm. Kernel** | ⬜ | 🟨 | 🟩 | 🟩 | 🟩 | 🟩 | 🟩 |
+| **Verification Requirements (VR)** | ⬜ | ⬜ | 🟨 | 🟩 | 🟧 | 🟩 | 🟩 |
+| **Oversight Ledger / Logging** | ⬜ | ⬜ | ⬜ | 🟩 | 🟧 | 🟩 | 🟩 |
+| **Meta-State Layer (MSL)** | ⬜ | ⬜ | ⬜ | ⬜ | 🟧 | 🟩 | 🟩 |
+| **Detectors D1–D7** | ⬜ | ⬜ | ⬜ | ⬜ | 🟧 | 🟩 | 🟩 |
+| **Detector D8 (Notability)** | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | 🟩 |
+| **Normalization Balancing Layer (NBL)** | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | 🟩 | 🟩 |
+| **Cost-Control & Fidelity Layer (CCFL)** | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | 🟩 | 🟩 |
+| **L42 Grounding Evidence Node (GEN)** | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | 🟩 |
+| **V9 State-Proof Metadata** | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | 🟩 |
+| **NCWA / SLTP Rules** | ⬜ | ⬜ | 🟨 | 🟩 | 🟧 | 🟩 | 🟩 |
+| **JSON Knowledge Graph** | ⬜ | ⬜ | ⬜ | ⬜ | 🟧 | 🟩 | 🟩 |
+| **Generation Rules** | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | 🟩 |
+
+---
+
+## Key Observations
+
+### **Immutable Since v2.1 (Never Changed)**
+1. **Core Loop:** LISTEN → REFLECT → WAIT → ACT → ACKNOWLEDGE
+2. **Five Pillars:** Ethical Decision-Making, Transparency, Accountability, Contextual Understanding, Collaboration
+3. **Core Guarantee:** "System must not ACT before understanding and authorization"
+4. **Breach Reset Protocol:** Explicit acknowledgement + reset when guarantee violated
+5. **Failure Mode Framework:** 7 initial modes documented; expanded to FM#29-#45 in v4.0+
+
+**Verdict:** The protocol's **philosophical foundation is permanent.** All subsequent versions layered enforcement, detection, and verification ON TOP of the immutable core.
+
+---
+
+### **Gradual Accretion (Added Without Breaking)**
+
+| Phase | Key Addition | Purpose |
+|---|---|---|
+| **v2.1 → v3.4** | Policy + Defensive Architecture | Transform philosophy into enforceable rules |
+| **v3.4 → v3.6** | Calibration + Oversight Logging | Enable verification and compliance audit |
+| **v3.6 → v4.0** | Schema transition (Text → JSON) | Enable automated parsing and scenario generation |
+| **v4.0 → v4.1-RC** | Detectors + Grounding + Proof | Automate detection + enable verifiable provenance |
+
+**Pattern:** Each version added safety/verification **layers** without modifying the core loop. This is by design—the loop is the bedrock.
+
+---
+
+### **The Missing v3.8 Bridge**
+
+**Status:** v3.8 is not formally documented but is inferred from v4.0 references.
+
+**Probable Role:**
+- Internal prototype for schema translation (Text → JSON)
+- Early detector framework (D1–D4)
+- Meta-State Layer first implementation
+- Not released because v4.0 superseded it
+
+**Impact:** None. The core loop was already locked by v3.6. v3.8 was purely technical exploration.
+
+---
+
+### **v3.5 Tone Refinement (No Logic Change)**
+
+**Status:** v3.5 re-engineered v3.4's language from adversarial ("defend," "lock down") to cooperative ("support," "guide").
+
+**Impact:** Zero on protocol logic. This proved LFAS is **format-agnostic**—it works equally well in strict or cooperative frames.
+
+---
+
+## v4.1-RC Component Maturity
+
+| Component | Status | Readiness |
+|---|---|---|
+| **Core Loop** | ✅ Locked since v2.1 | Production |
+| **Five Pillars** | ✅ Locked since v2.1 | Production |
+| **Detectors (D1–D8)** | ✅ Mature in v4.1-RC | Production |
+| **Safety Layers (L1–L41)** | ✅ Mature in v4.1-RC | Production |
+| **Grounding (GEN)** | ✅ New in v4.1-RC | Production |
+| **Proof Metadata (V9)** | ✅ New in v4.1-RC | Production |
+
+---
+
+## Validation for v4.1 Stable
+
+Before promoting to v4.1 Stable, confirm:
+
+- [ ] **All 41 nodes** in the Knowledge Graph are present and valid
+- [ ] **All 8 detectors (D1–D8)** activate correctly in LISTEN phase
+- [ ] **Core loop** (LISTEN→REFLECT→WAIT→ACT→ACK) has **zero deviations** from v2.1 original
+- [ ] **Five Pillars** are **unchanged** and traceable in policy documentation
+- [ ] **Grounding (GEN)** and **Proof (V9)** work with all scenario graphs
+- [ ] **Backward compatibility:** v4.1-RC outputs match v4.0 output structure (when detectors don't trigger)
+
+See `IMPLEMENTATION_CHECKLIST.md` for full validation protocol.
+
+---
+
+## Conclusion
+
+**LFAS is strategically conservative.** The core (loop, pillars, guarantee) has been immutable since v2.1. Every subsequent version added **verification, automation, and proof layers** while preserving the foundation.
+
+This design ensures:
+- ✅ Protocol stability (core never changes)
+- ✅ Continuous improvement (layers added without risk)
+- ✅ Backward compatibility (older versions can coexist with newer)
+- ✅ Future extensibility (new detectors/layers plug in without breaking core)
