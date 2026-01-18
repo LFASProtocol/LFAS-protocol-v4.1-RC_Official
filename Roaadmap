@@ -1,0 +1,124 @@
+# LFAS Protocol Roadmap
+
+**Version:** v4.1-RC → v4.1 Stable → v4.2+  
+**Last Updated:** December 2024
+
+---
+
+## v4.1-RC (Current Release Candidate)
+
+### ✅ Completed
+
+- [x] Master Knowledge Graph blueprint finalized (41 nodes, 8 detectors)
+- [x] All safety layers implemented (L1–L41)
+- [x] Detector framework operational (D1–D8)
+- [x] Grounding Evidence Node (L42-GEN) integrated
+- [x] State-Proof Metadata Block (V9) designed
+- [x] Generation rules documented for scenario-specific graphs
+- [x] Human-readable proof document (Visual Summary)
+- [x] Complete version history (CHANGELOG.md)
+- [x] Component continuity matrix (VERSION_MATRIX.md)
+- [x] Implementation validation checklist created
+
+### 📋 In Progress
+
+- [ ] Public review window (2-week community feedback period)
+- [ ] Integration testing with real scenario graphs
+- [ ] Documentation finalization and polishing
+
+### ⏳ Blocked/Deferred
+
+- v4.1-RC → v4.1 Stable promotion (waiting for Phase 1–4 validation)
+
+---
+
+## v4.1 Stable (Next Release)
+
+**Timeline:** 4 weeks from v4.1-RC freeze  
+**Prerequisites:** All items in `IMPLEMENTATION_CHECKLIST.md` must pass
+
+### Phase 1: Specification Integrity (Week 1)
+- [ ] Graph structure validation (node count, edge routing, cycle detection)
+- [ ] Detector framework verification (D1–D8 firing in correct phase)
+- [ ] Safety layer routing confirmation (all L1–L41 present and active)
+- [ ] Gate sequencing validation (WAIT→ACT→ACK cannot be bypassed)
+- [ ] Failure mode coverage audit (all FM#29-#45 mapped to detectors)
+
+### Phase 2: Functional Testing (Week 2)
+- [ ] Test Scenario 1: Financial Crisis (D2+D3 trigger, HSM activates)
+- [ ] Test Scenario 2: Medical Emergency (D3 immediate trigger, D4 escalates)
+- [ ] Test Scenario 3: Legal Document (D6+D7 active, disclaimer enforced)
+- [ ] Detector chain testing (all 8 fire in LISTEN, feed to D5)
+- [ ] Failure mode recovery testing (FM#34, FM#35, FM#42 pass)
+
+### Phase 3: Cross-Reference Validation (Week 3)
+- [ ] Backward compatibility confirmed (v2.1 loop intact)
+- [ ] v3.6 logic preservation verified (VR mapping correct)
+- [ ] v4.0 schema compatibility validated
+- [ ] Chronology alignment complete (CHANGELOG + VERSION_MATRIX)
+- [ ] v3.8 gap explained or archived
+
+### Phase 4: External Review (Week 4)
+- [ ] Architecture review sign-off
+- [ ] Policy review sign-off
+- [ ] Implementation review sign-off
+- [ ] Community feedback processed (if applicable)
+- [ ] RELEASE_NOTES.md finalized
+
+### Release Gate
+- [ ] Lead approver signature on sign-off table
+- [ ] All blockers resolved or documented
+- [ ] v4.1 Stable promoted
+
+---
+
+## v4.2 (Future)
+
+### Planned Features
+
+#### 1. **Automated KG Builder Tool**
+- CLI or web interface for generating scenario-specific graphs from `blueprint.json`
+- Input: User intent + risk context
+- Output: Valid LFAS enforcement graph
+- Timeline: Q1 2025
+
+#### 2. **Test Suite Expansion**
+- Automated regression tests for all detectors
+- Failure mode injection testing
+- Performance benchmarks
+- Timeline: Q1 2025
+
+#### 3. **Multi-Platform Integration**
+- OpenAI API wrapper with LFAS gating
+- Anthropic Claude integration
+- Ollama/local LLM support
+- Timeline: Q2 2025
+
+#### 4. **Audit Dashboard**
+- Real-time protocol compliance monitoring
+- Detector activation logging
+- Decision provenance visualization
+- Timeline: Q2 2025
+
+#### 5. **Documentation & Training**
+- Tutorial videos for implementation
+- Case study library (published with consent)
+- Integration guide for platform developers
+- Timeline: Q2 2025
+
+---
+
+## v4.3+ (Exploratory)
+
+### Under Consideration
+
+- **Adaptive detectors** — Machine-learned tuning of detector sensitivity based on domain
+- **Distributed enforcement** — Multi-agent LFAS across federated systems
+- **Formal verification** — Mathematical proof of core loop properties
+- **Cross-protocol compatibility** — Integration with other safety frameworks (Constitutional AI, etc.)
+
+---
+
+## Implementation Roadmap
+
+### Current Phase (December 2024)
