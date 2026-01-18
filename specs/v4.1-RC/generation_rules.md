@@ -1,0 +1,58 @@
+# LFAS v4.1 Knowledge Graph Generation Rules
+
+## 1. Purpose
+This document explains how to use the `lfas_v4.1-rc_knowledge_graph_blueprint.json` (Master Graph) to build specific, enforceable prompt Knowledge Graphs (KGs) for real-time user requests.
+
+## 2. Core Principle
+Every user request must be transformed into a **scenario-specific KG** that **instantiates** relevant parts of the master graph. This KG becomes the enforceable input for the AI system, preventing unauthorized or unsafe actions.
+
+## 3. Generation Steps
+
+### Step 1: Analyze the User Request
+- **Input:** Raw user message.
+- **Output:** Determine the following from the Master Graph:
+  - **Primary Target Phase:** Which `Phase` (`L2-L6`) is the request targeting? (Usually `L5` for ACT).
+  - **Triggered Detectors:** Which `Detector` (`D1-D8`) nodes are relevant?
+    - `D2_VULNERABILITY_DETECTOR`: Financial distress, emotional language, low literacy.
+    - `D3_CRISIS_DETECTOR`: Immediate harm, self-harm, legal/financial emergency.
+    - `D6_LOGIC_CONSISTENCY_CHECKER`: Contradictions, impossible requests.
+    - `D7_EVIDENCE_PRESENCE_CHECKER`: Requests referencing missing files/links.
+    - `D8_NOTABILITY_DETECTOR`: Unusual corrections, rare but critical signals.
+  - **Applicable Safety Layers:** Which `Layer` nodes must be activated? (e.g., `L9` AAL for vague requests, `L16` NBL for high-risk users).
+
+### Step 2: Select & Instantiate Master Graph Nodes
+Create a new `nodes` array for your scenario KG. **You must include:**
+
+1.  `USER_REQUEST` node (with the literal user text).
+2.  `LFAS_41` protocol root node.
+3.  The target `Phase` node (e.g., `L5_ACT`).
+4.  **All** triggered `Detector` nodes.
+5.  **All** required `Layer` and `Mode` nodes (e.g., `L31_HIGH_STAKES_MODE`).
+
+### Step 3: Create Enforcement Edges (The Critical Step)
+Create an `edges` array that **replicates the constraint logic** from the Master Graph. This enforces the safety rules.
+
+**Crucial Rule:** If you include a Detector, you **MUST** add its corresponding enforcement edges from the Master Graph.
+- **Example 1:** If `D3_CRISIS_DETECTOR` is triggered, you MUST add:
+    ```json
+    {"from": "D3_CRISIS_DETECTOR", "to": "L31", "rel": "triggers_high_stakes_mode"},
+    {"from": "D3_CRISIS_DETECTOR", "to": "D5_USER_SAFETY_SCORER", "rel": "feeds"}
+    ```
+- **Example 2:** If `D2_VULNERABILITY_DETECTOR` is triggered, you MUST add:
+    ```json
+    {"from": "D2_VULNERABILITY_DETECTOR", "to": "D5_USER_SAFETY_SCORER", "rel": "feeds"},
+    {"from": "D5_USER_SAFETY_SCORER", "to": "L16", "rel": "activates_mode"}
+    ```
+
+### Step 4: Apply the Final Schema
+The completed scenario KG must follow this exact schema:
+
+```json
+{
+  "lfas_version": "4.1-RC",
+  "scenario_id": "unique_short_name",
+  "scenario_description": "Brief description of user context and risk.",
+  "timestamp": "ISO-8601 timestamp",
+  "nodes": [...],
+  "edges": [...]
+}
