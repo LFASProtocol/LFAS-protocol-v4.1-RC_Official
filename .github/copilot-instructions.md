@@ -28,7 +28,7 @@ LFAS-protocol-v4.1-RC_Official/
 ├── MANIFEST                              # Repository overview and structure
 ├── CHANGELOG                             # Version history (v2.1 → v4.1-RC)
 ├── VERSION_MATRIX                        # Component continuity heatmap
-├── Roaadmap                              # Development timeline and next steps
+├── Roaadmap                              # Development timeline and next steps (Note: filename has two 'a's)
 ├── Visual_Summary.md                     # Human-readable protocol overview with diagrams
 └── v4.1 Stable — Implementation Validation Checklist  # Validation gates for stable release
 ```
@@ -54,7 +54,7 @@ LFAS-protocol-v4.1-RC_Official/
 - **CHANGELOG**: Complete version evolution with rationale for all changes
 - **VERSION_MATRIX**: Component continuity across versions
 - **Visual_Summary.md**: Non-technical overview with Mermaid diagrams
-- **Roaadmap**: Timeline for v4.1 Stable and v4.2+ features
+- **Roaadmap** (Note: filename intentionally has two 'a's): Timeline for v4.1 Stable and v4.2+ features
 
 ## Protocol Components
 
@@ -189,7 +189,7 @@ See `v4.1 Stable — Implementation Validation Checklist` for detailed gates.
 - **Technical specifications**: See `specs/v4.1-RC/blueprint.json` and `generation_rules.md`
 - **Version history**: See `CHANGELOG`
 - **Component evolution**: See `VERSION_MATRIX`
-- **Implementation timeline**: See `Roaadmap`
+- **Implementation timeline**: See `Roaadmap` (Note: filename has two 'a's)
 - **Non-technical overview**: See `Visual_Summary.md`
 
 ## License & Attribution
