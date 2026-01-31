@@ -50,31 +50,59 @@
 - v4.1 Stable next steps (verification, builder tool, test suite)
 - Future versions and implementation timeline
 
+### 8. **`/interaction-autopsy/`**
+- **NEW MODULE:** LFAS Interaction Autopsy & Knowledge Graph Constructor
+- Forensic analysis system for user-AI conversation transcripts
+- Detects failure patterns, maps interaction causality, provides counterfactual LFAS-compliant paths
+- Components:
+  - `README.md` - Module overview and core principles
+  - `failure_modes.json` - Clean reference data (Layer 1) with dual-labeling taxonomy
+  - `detectors.json` - Detector specifications and interaction causality chains
+  - `autopsy_analyzer.md` - Step-by-step methodology (LISTEN→REFLECT→WAIT→ACT→ACKNOWLEDGE)
+  - `schemas/audit_artifact.json` - JSON schema for standardized autopsy outputs
+  - `examples/` - Sample analyses demonstrating Ice Cream Shop Reflex (FM#42), Silence-Trap (FM#34)
+  - `docs/USAGE_GUIDE.md` - Comprehensive usage guide for researchers and practitioners
+- **Purpose:** Move from "AI did wrong" → "interaction patterns co-produce failures" (control theory approach)
+- **Status:** v1.0 - Ready for transcript analysis and research validation
+
 ---
 
 ## How to Use This Release
 
 1. Use `blueprint.json` as the authoritative graph for any LFAS-compliant system
 2. Apply `generation_rules.md` to create scenario-specific enforcement graphs
-3. Reference `LFAS_v4.1-RC_Visual_Summary.md` for stakeholder communication
-4. Use `CHANGELOG.md` and `VERSION_MATRIX.md` to understand protocol evolution
-5. Follow `IMPLEMENTATION_CHECKLIST.md` for v4.1 Stable validation
+3. Reference `Visual_Summary.md` for stakeholder communication
+4. Use `CHANGELOG` and `VERSION_MATRIX` to understand protocol evolution
+5. Follow `v4.1 Stable — Implementation Validation Checklist` for v4.1 Stable validation
+6. **NEW:** Use `interaction-autopsy/` module to analyze user-AI conversations for failure patterns and LFAS compliance validation
 
 ---
 
 ## Repository Structure
 
 LFAS-protocol-v4.1-RC_Official/
-├── MANIFEST.md (this file)
-├── CHANGELOG.md (version history)
-├── VERSION_MATRIX.md (component continuity)
-├── IMPLEMENTATION_CHECKLIST.md (v4.1 Stable gates)
-├── LFAS_v4.1-RC_Visual_Summary.md (human-readable proof)
-├── ROADMAP.md (next steps)
-└── specs/
-└── v4.1-RC/
-├── blueprint.json (MASTER: 41 nodes, 8 detectors)
-└── generation_rules.md (scenario graph generation rules)
+├── MANIFEST (this file)
+├── CHANGELOG (version history)
+├── VERSION_MATRIX (component continuity)
+├── v4.1 Stable — Implementation Validation Checklist
+├── Visual_Summary.md (human-readable proof)
+├── Roaadmap (next steps)
+├── specs/
+│   └── v4.1-RC/
+│       ├── blueprint.json (MASTER: 41 nodes, 8 detectors)
+│       └── generation_rules.md (scenario graph generation rules)
+└── interaction-autopsy/
+    ├── README.md (module overview)
+    ├── failure_modes.json (Layer 1 clean reference data)
+    ├── detectors.json (D1-D8 specifications + causality chains)
+    ├── autopsy_analyzer.md (methodology)
+    ├── schemas/
+    │   └── audit_artifact.json (output schema)
+    ├── examples/
+    │   ├── example_silence_trap_analysis.json
+    │   └── example_ice_cream_shop_reflex_analysis.json
+    └── docs/
+        └── USAGE_GUIDE.md
 
 
 ---

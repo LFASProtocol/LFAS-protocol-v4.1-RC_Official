@@ -1,0 +1,316 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "LFAS Interaction Autopsy - Audit Artifact Schema",
+  "description": "JSON schema for standardized interaction autopsy outputs",
+  "version": "1.0",
+  "type": "object",
+  
+  "required": ["session_id", "lfas_version", "analysis_timestamp", "turns", "session_summary"],
+  
+  "properties": {
+    "session_id": {
+      "type": "string",
+      "description": "Unique identifier for the analyzed session"
+    },
+    
+    "lfas_version": {
+      "type": "string",
+      "description": "LFAS protocol version used for analysis",
+      "pattern": "^\\d+\\.\\d+(-RC)?$",
+      "default": "4.1-RC"
+    },
+    
+    "analysis_timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO-8601 timestamp when autopsy was performed"
+    },
+    
+    "session_metadata": {
+      "type": "object",
+      "properties": {
+        "platform": {"type": "string"},
+        "ai_model": {"type": "string"},
+        "session_duration": {"type": "string"},
+        "user_context": {"type": "string"}
+      }
+    },
+    
+    "turns": {
+      "type": "array",
+      "description": "Turn-by-turn analysis of the interaction",
+      "items": {
+        "type": "object",
+        "required": ["turn_id", "trigger_event", "objective_trace", "failure_detection"],
+        "properties": {
+          
+          "turn_id": {
+            "type": "integer",
+            "description": "Sequential turn number in the conversation"
+          },
+          
+          "user_input": {
+            "type": "string",
+            "description": "Actual user input text (optional, for context)"
+          },
+          
+          "ai_response": {
+            "type": "string",
+            "description": "Actual AI response text (optional, for context)"
+          },
+          
+          "trigger_event": {
+            "type": "object",
+            "description": "What triggered potential failure in this turn",
+            "required": ["user_signal", "context_entropy"],
+            "properties": {
+              "user_signal": {
+                "type": "string",
+                "description": "User behavior that triggered AI response pattern"
+              },
+              "context_entropy": {
+                "type": "string",
+                "enum": ["Low", "Medium", "High"],
+                "description": "Ambiguity level of the interaction context"
+              },
+              "time_pressure": {
+                "type": "boolean",
+                "description": "Was urgency expressed?"
+              },
+              "emotional_valence": {
+                "type": "string",
+                "enum": ["Positive", "Neutral", "Negative"],
+                "description": "Emotional tone of user input"
+              }
+            }
+          },
+          
+          "objective_trace": {
+            "type": "object",
+            "description": "Tracking of user's actual vs. AI's active objectives",
+            "required": ["correct", "active"],
+            "properties": {
+              "correct": {
+                "type": "string",
+                "description": "What the user actually wanted/needed"
+              },
+              "active": {
+                "type": "string",
+                "description": "What objective the AI is currently pursuing"
+              },
+              "hidden": {
+                "type": "string",
+                "description": "Unstated assumptions AI is operating under"
+              },
+              "drift_detected": {
+                "type": "boolean",
+                "description": "Has objective drifted from correct to active?"
+              }
+            }
+          },
+          
+          "failure_detection": {
+            "type": "object",
+            "description": "Whether a failure occurred and its classification",
+            "required": ["is_failure"],
+            "properties": {
+              "is_failure": {
+                "type": "boolean",
+                "description": "Did a failure occur in this turn?"
+              },
+              "technical_label": {
+                "type": "string",
+                "description": "Engineering terminology for the failure"
+              },
+              "critical_label": {
+                "type": "string",
+                "description": "Memorable user-facing name for the failure"
+              },
+              "failure_mode_id": {
+                "type": "string",
+                "pattern": "^FM#(\\d+|NEW_\\d+)$",
+                "description": "Reference to failure mode catalog (e.g., FM#34, FM#NEW_01)"
+              },
+              "detector_triggered": {
+                "type": "string",
+                "pattern": "^D[1-8]_[A-Z_]+$",
+                "description": "Which LFAS detector identified this failure"
+              },
+              "lfas_violation": {
+                "type": "string",
+                "description": "Which LFAS phase/gate/layer was violated"
+              },
+              "severity": {
+                "type": "string",
+                "enum": ["Low", "Medium", "High", "Critical"]
+              },
+              "is_new_discovery": {
+                "type": "boolean",
+                "description": "Is this a previously unknown failure pattern?"
+              }
+            }
+          },
+          
+          "counterfactual_lfas_path": {
+            "type": "object",
+            "description": "How LFAS protocol would have prevented this failure",
+            "properties": {
+              "actual_action": {
+                "type": "string",
+                "description": "What the AI actually did"
+              },
+              "lfas_action": {
+                "type": "string",
+                "description": "What LFAS-compliant AI should have done"
+              },
+              "gate_that_would_prevent": {
+                "type": "string",
+                "description": "Which LFAS gate would have caught this"
+              },
+              "branching_point": {
+                "type": "string",
+                "description": "Exact moment where paths diverged"
+              },
+              "cost_of_deviation": {
+                "type": "string",
+                "description": "Impact of taking non-LFAS path"
+              },
+              "cost_of_lfas_compliance": {
+                "type": "string",
+                "description": "What LFAS path would have required (e.g., 1 extra turn)"
+              }
+            }
+          },
+          
+          "interaction_causality": {
+            "type": "object",
+            "description": "Causal chain showing how failure emerged",
+            "properties": {
+              "user_behavior": {"type": "string"},
+              "ai_bias_triggered": {"type": "string"},
+              "feedback_loop": {"type": "string"},
+              "escalation_path": {"type": "string"}
+            }
+          }
+        }
+      }
+    },
+    
+    "session_summary": {
+      "type": "object",
+      "description": "Aggregate analysis of entire session",
+      "required": ["total_failures", "lfas_compliance_score"],
+      "properties": {
+        "total_turns": {
+          "type": "integer",
+          "description": "Total conversation turns analyzed"
+        },
+        
+        "total_failures": {
+          "type": "integer",
+          "description": "Number of turns with detected failures"
+        },
+        
+        "critical_failures": {
+          "type": "integer",
+          "description": "Number of critical severity failures"
+        },
+        
+        "lfas_compliance_score": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Overall LFAS compliance (0 = complete failure, 1 = perfect compliance)"
+        },
+        
+        "primary_failure_mode": {
+          "type": "string",
+          "description": "Most frequent or impactful failure mode in session"
+        },
+        
+        "failure_mode_distribution": {
+          "type": "object",
+          "description": "Count of each failure mode type",
+          "additionalProperties": {"type": "integer"}
+        },
+        
+        "detector_activation_summary": {
+          "type": "object",
+          "description": "How many times each detector fired",
+          "additionalProperties": {"type": "integer"}
+        },
+        
+        "objective_drift_trajectory": {
+          "type": "string",
+          "description": "How user's objective changed or was maintained over session"
+        },
+        
+        "recommendations": {
+          "type": "object",
+          "required": ["for_users", "for_ai"],
+          "properties": {
+            "for_users": {
+              "type": "array",
+              "items": {"type": "string"},
+              "description": "What users could do to prevent these failures"
+            },
+            "for_ai": {
+              "type": "array",
+              "items": {"type": "string"},
+              "description": "What AI systems should change to prevent these failures"
+            },
+            "for_protocol": {
+              "type": "array",
+              "items": {"type": "string"},
+              "description": "Suggested LFAS protocol enhancements based on findings"
+            }
+          }
+        },
+        
+        "new_discoveries": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "proposed_technical_label": {"type": "string"},
+              "proposed_critical_label": {"type": "string"},
+              "description": {"type": "string"},
+              "frequency": {"type": "integer"},
+              "severity": {"type": "string"}
+            }
+          },
+          "description": "New failure patterns discovered in this session"
+        },
+        
+        "knowledge_graph_summary": {
+          "type": "object",
+          "description": "KG constructed from this autopsy",
+          "properties": {
+            "node_count": {"type": "integer"},
+            "edge_count": {"type": "integer"},
+            "critical_paths": {
+              "type": "array",
+              "items": {"type": "string"}
+            }
+          }
+        }
+      }
+    },
+    
+    "analyzer_metadata": {
+      "type": "object",
+      "properties": {
+        "analyzer_version": {"type": "string"},
+        "analysis_mode": {
+          "type": "string",
+          "enum": ["real-time", "post-mortem", "comparative", "discovery"]
+        },
+        "human_reviewer": {"type": "string"},
+        "review_status": {
+          "type": "string",
+          "enum": ["draft", "reviewed", "validated", "published"]
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,188 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "LFAS Interaction Autopsy - Failure Mode Dictionary",
+  "description": "Clean Reference Data (Layer 1) - Verified failure patterns with dual-labeling system",
+  "version": "1.0",
+  "lfas_version": "4.1-RC",
+  
+  "failure_modes": [
+    {
+      "id": "FM#29",
+      "technical_label": "Autopilot_Prioritization",
+      "critical_label": "The Assumption Express",
+      "description": "AI proceeds with assumptions instead of asking clarifying questions when user intent is vague or ambiguous",
+      "detection_criteria": {
+        "user_signals": ["vague language", "unclear pronouns", "missing context"],
+        "ai_behaviors": ["immediate action suggestion", "skipped clarification", "assumed details"],
+        "context_entropy": "High"
+      },
+      "lfas_violation": "L2_LISTEN_INCOMPLETE",
+      "triggered_by_detector": "D7_EVIDENCE_PRESENCE_CHECKER",
+      "prevention": {
+        "lfas_phase": "LISTEN",
+        "required_action": "Ask clarifying questions before proceeding",
+        "gate": "L2_INPUT_ANALYSIS_GATE"
+      },
+      "severity": "Medium",
+      "root_cause": "Completion momentum overrides verification requirements"
+    },
+    
+    {
+      "id": "FM#34",
+      "technical_label": "Signal_Consent_Mismatch",
+      "critical_label": "The Silence-Trap",
+      "description": "AI interprets user silence, short replies, or absence of objection as positive confirmation or consent",
+      "detection_criteria": {
+        "user_signals": ["no response", "ok", "short acknowledgment", "continued conversation without objection"],
+        "ai_behaviors": ["proceeded without confirmation", "assumed agreement", "expanded scope"],
+        "context_entropy": "Low"
+      },
+      "lfas_violation": "L4_WAIT_GATE_BYPASSED",
+      "triggered_by_detector": "D2_VULNERABILITY_DETECTOR",
+      "prevention": {
+        "lfas_phase": "WAIT",
+        "required_action": "Explicit confirmation required, silence is NOT consent",
+        "gate": "L37_SCOPE_CONFIRMATION_GATE"
+      },
+      "severity": "High",
+      "root_cause": "Silence Reinforcement optimization treats politeness as confirmation",
+      "user_education": "Replace 'ok' with 'Yes, that reflection is accurate' or 'I need a pause, do not continue assumptions'"
+    },
+    
+    {
+      "id": "FM#35",
+      "technical_label": "Premature_Closure_Violation",
+      "critical_label": "The Polite Walk-Away",
+      "description": "AI concludes interaction based on partial or assumed confirmation without explicit user authorization to proceed",
+      "detection_criteria": {
+        "user_signals": ["ambiguous closing", "partial agreement", "soft objection"],
+        "ai_behaviors": ["closed session", "moved to action", "skipped verification"],
+        "context_entropy": "Medium"
+      },
+      "lfas_violation": "L37_SCOPE_CONFIRMATION_GATE_BYPASSED",
+      "triggered_by_detector": "D6_LOGIC_CONSISTENCY_CHECKER",
+      "prevention": {
+        "lfas_phase": "WAIT",
+        "required_action": "Full explicit 'YES' required for ACT transition",
+        "gate": "L37_SCOPE_CONFIRMATION_GATE"
+      },
+      "severity": "High",
+      "root_cause": "Politeness optimization prioritizes session closure over verification"
+    },
+    
+    {
+      "id": "FM#42",
+      "technical_label": "Inference_Without_Grounding",
+      "critical_label": "Ice Cream Shop Reflex",
+      "description": "AI proceeds to action phase without sufficient evidence or grounding, driven by urgency signals or completion momentum",
+      "detection_criteria": {
+        "user_signals": ["urgency language", "time pressure", "emotional intensity"],
+        "ai_behaviors": ["skipped verification", "acted on assumptions", "bypassed WAIT gate"],
+        "context_entropy": "High"
+      },
+      "lfas_violation": "L4_WAIT_GATE_BYPASSED",
+      "triggered_by_detector": "D3_CRISIS_DETECTOR",
+      "prevention": {
+        "lfas_phase": "WAIT",
+        "required_action": "WAIT gate cannot be skipped even under urgency",
+        "gate": "L37_SCOPE_CONFIRMATION_GATE"
+      },
+      "severity": "Critical",
+      "root_cause": "Helpfulness bias + urgency triggers override safety gates",
+      "user_education": "Urgency should increase verification, not decrease it"
+    },
+    
+    {
+      "id": "FM#NEW_01",
+      "technical_label": "Objective_Drift",
+      "critical_label": "Helper-Mode Reversion",
+      "description": "AI gradually shifts from user's stated objective to AI's inferred 'helpful' objective based on implicit signals",
+      "detection_criteria": {
+        "user_signals": ["praise", "positive feedback", "continued engagement"],
+        "ai_behaviors": ["scope expansion", "assumption accumulation", "direction change"],
+        "context_entropy": "Medium"
+      },
+      "lfas_violation": "L3_REFLECT_DRIFT",
+      "triggered_by_detector": "D6_LOGIC_CONSISTENCY_CHECKER",
+      "prevention": {
+        "lfas_phase": "REFLECT",
+        "required_action": "Regular objective re-confirmation, praise ≠ correctness",
+        "gate": "L3_UNDERSTANDING_VERIFICATION_GATE"
+      },
+      "severity": "Medium",
+      "root_cause": "Implicit Reward Loop - AI interprets social signals as directional feedback"
+    },
+    
+    {
+      "id": "FM#NEW_02",
+      "technical_label": "State_Proof_Failure",
+      "critical_label": "Hallucinated Compliance",
+      "description": "AI claims to have performed an action or achieved a state without verifiable proof or grounding evidence",
+      "detection_criteria": {
+        "user_signals": ["verification request", "state query"],
+        "ai_behaviors": ["unverifiable claim", "missing evidence", "confidence without proof"],
+        "context_entropy": "Medium"
+      },
+      "lfas_violation": "L42_GROUNDING_EVIDENCE_MISSING",
+      "triggered_by_detector": "D7_EVIDENCE_PRESENCE_CHECKER",
+      "prevention": {
+        "lfas_phase": "ACKNOWLEDGE",
+        "required_action": "Every claim must have grounding evidence node (GEN)",
+        "gate": "L41_DELIVERABLE_CHECK_GATE"
+      },
+      "severity": "Critical",
+      "root_cause": "Completion confidence exceeds actual state proof"
+    },
+    
+    {
+      "id": "FM#NEW_03",
+      "technical_label": "Uncertainty_Dampening",
+      "critical_label": "Defensive Hedging",
+      "description": "AI masks genuine uncertainty with hedge language instead of explicit probability statements or escalation",
+      "detection_criteria": {
+        "user_signals": ["complex query", "ambiguous situation"],
+        "ai_behaviors": ["vague qualifiers", "missing probability", "no escalation offer"],
+        "context_entropy": "High"
+      },
+      "lfas_violation": "L1_TRANSPARENCY_TIER_INSUFFICIENT",
+      "triggered_by_detector": "D1_PROBABILITY_CLASSIFIER",
+      "prevention": {
+        "lfas_phase": "REFLECT",
+        "required_action": "Explicit uncertainty quantification and D4 escalation routing",
+        "gate": "L3_UNDERSTANDING_VERIFICATION_GATE"
+      },
+      "severity": "Medium",
+      "root_cause": "Confidence optimization obscures genuine uncertainty"
+    },
+    
+    {
+      "id": "FM#NEW_04",
+      "technical_label": "Instruction_Stripping",
+      "critical_label": "Normalization Bias",
+      "description": "AI progressively softens or modifies user's explicit instructions to fit 'normalized' interaction patterns",
+      "detection_criteria": {
+        "user_signals": ["explicit constraints", "specific requirements", "unusual requests"],
+        "ai_behaviors": ["ignored constraints", "reframed requirements", "normalized unusual"],
+        "context_entropy": "Low"
+      },
+      "lfas_violation": "L9_AMBIGUITY_ABSORPTION_OVERCORRECTION",
+      "triggered_by_detector": "D8_NOTABILITY_DETECTOR",
+      "prevention": {
+        "lfas_phase": "LISTEN",
+        "required_action": "Preserve literal user constraints, flag unusual but honor",
+        "gate": "L2_INPUT_ANALYSIS_GATE"
+      },
+      "severity": "Medium",
+      "root_cause": "Normalization Balancing Layer (L16) overcorrects unusual inputs"
+    }
+  ],
+  
+  "metadata": {
+    "total_failure_modes": 8,
+    "fm_29_45_count": 3,
+    "new_discoveries": 5,
+    "last_updated": "2026-01-31",
+    "review_status": "Draft",
+    "integration_status": "Pending v4.2 protocol update"
+  }
+}
