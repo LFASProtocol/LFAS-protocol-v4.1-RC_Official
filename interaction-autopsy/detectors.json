@@ -1,0 +1,307 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "LFAS Interaction Detectors - User-AI Pattern Mapping",
+  "description": "Detector specifications for identifying interaction failure triggers",
+  "version": "1.0",
+  "lfas_version": "4.1-RC",
+  
+  "detectors": [
+    {
+      "id": "D1",
+      "name": "Probability_Classifier",
+      "description": "Detects AI uncertainty levels and missing probability quantification",
+      "interaction_patterns": {
+        "user_signals": [
+          "Complex queries requiring inference",
+          "Questions about uncertain future events",
+          "Requests for predictions or estimates"
+        ],
+        "ai_bias_triggers": [
+          "Confidence optimization - presenting uncertain information as certain",
+          "Hedge language to mask uncertainty",
+          "Avoiding explicit probability statements"
+        ],
+        "failure_modes_detected": ["FM#NEW_03: Defensive Hedging"],
+        "activation_threshold": "AI response lacks explicit probability when uncertainty exists"
+      },
+      "lfas_integration": {
+        "phase": "REFLECT",
+        "gates": ["L3_UNDERSTANDING_VERIFICATION_GATE"],
+        "routing": "If high uncertainty detected → D4_ESCALATION_ROUTER"
+      }
+    },
+    
+    {
+      "id": "D2",
+      "name": "Vulnerability_Detector",
+      "description": "Identifies user cognitive/emotional risk factors indicating increased verification needs",
+      "interaction_patterns": {
+        "user_signals": [
+          "Short replies (fatigue indicator)",
+          "Emotional language",
+          "Time pressure expressions",
+          "Complexity overload indicators",
+          "Silence or minimal acknowledgment"
+        ],
+        "ai_bias_triggers": [
+          "Silence Reinforcement - treating lack of objection as consent",
+          "Politeness optimization - avoiding clarification to reduce friction",
+          "Completion momentum - rushing to finish"
+        ],
+        "failure_modes_detected": [
+          "FM#34: The Silence-Trap",
+          "FM#NEW_01: Helper-Mode Reversion"
+        ],
+        "activation_threshold": "User shows signs of reduced engagement capacity"
+      },
+      "lfas_integration": {
+        "phase": "LISTEN",
+        "gates": ["L2_INPUT_ANALYSIS_GATE"],
+        "routing": "D2 → D5_USER_SAFETY_SCORER → L16_NORMALIZATION_BALANCING_LAYER"
+      }
+    },
+    
+    {
+      "id": "D3",
+      "name": "Crisis_Detector",
+      "description": "Identifies immediate harm potential or emergency urgency signals",
+      "interaction_patterns": {
+        "user_signals": [
+          "Urgency language ('urgent', 'emergency', 'immediately')",
+          "Crisis indicators",
+          "Self-harm references",
+          "Legal/financial emergency context"
+        ],
+        "ai_bias_triggers": [
+          "Ice Cream Shop Reflex - urgency bypasses verification",
+          "Helpfulness bias - wanting to act immediately",
+          "Gate bypass optimization - speed over safety"
+        ],
+        "failure_modes_detected": ["FM#42: Ice Cream Shop Reflex"],
+        "activation_threshold": "User signal indicates immediate action pressure"
+      },
+      "lfas_integration": {
+        "phase": "LISTEN",
+        "gates": ["L31_HIGH_STAKES_MODE"],
+        "routing": "D3 → L31 → D5 → MANDATORY_WAIT_GATE_ENFORCEMENT"
+      },
+      "critical_note": "Urgency INCREASES verification requirements, never decreases them"
+    },
+    
+    {
+      "id": "D4",
+      "name": "Escalation_Router",
+      "description": "Routes high-risk queries to safe-handoff protocols when AI capabilities are exceeded",
+      "interaction_patterns": {
+        "user_signals": [
+          "Requests beyond AI capability",
+          "Legal advice needs",
+          "Medical diagnosis requests",
+          "High-stakes decision support"
+        ],
+        "ai_bias_triggers": [
+          "Capability overconfidence",
+          "Helpfulness bias preventing refusal",
+          "Scope creep into dangerous territories"
+        ],
+        "failure_modes_detected": ["All critical severity failures"],
+        "activation_threshold": "Query risk exceeds AI safety bounds"
+      },
+      "lfas_integration": {
+        "phase": "REFLECT",
+        "gates": ["L3_UNDERSTANDING_VERIFICATION_GATE"],
+        "routing": "D1/D3 high risk → D4 → SAFE_HANDOFF_PROTOCOL"
+      }
+    },
+    
+    {
+      "id": "D5",
+      "name": "User_Safety_Scorer",
+      "description": "Aggregates risk signals from D2, D3 to compute interaction safety score and activate protection modes",
+      "interaction_patterns": {
+        "user_signals": ["Composite from D2 and D3"],
+        "ai_bias_triggers": ["Risk underestimation", "Mode activation bypass"],
+        "failure_modes_detected": ["All modes where user vulnerability is factor"],
+        "activation_threshold": "Safety score below threshold triggers protective modes"
+      },
+      "lfas_integration": {
+        "phase": "LISTEN → REFLECT",
+        "gates": ["L16_NORMALIZATION_BALANCING_LAYER", "L31_HIGH_STAKES_MODE"],
+        "routing": "D5 score → Mode activation → Gate enforcement adjustment"
+      }
+    },
+    
+    {
+      "id": "D6",
+      "name": "Logic_Consistency_Checker",
+      "description": "Detects contradictions, objective drift, and logical inconsistencies in interaction",
+      "interaction_patterns": {
+        "user_signals": [
+          "Contradictory statements",
+          "Shifted objectives",
+          "Implied vs. stated goals mismatch"
+        ],
+        "ai_bias_triggers": [
+          "Objective Drift - AI infers different goal than user stated",
+          "Implicit Reward Loop - social signals override stated intent",
+          "Normalization of contradictions"
+        ],
+        "failure_modes_detected": [
+          "FM#35: The Polite Walk-Away",
+          "FM#NEW_01: Helper-Mode Reversion"
+        ],
+        "activation_threshold": "Detected inconsistency between stated and active objectives"
+      },
+      "lfas_integration": {
+        "phase": "REFLECT",
+        "gates": ["L3_UNDERSTANDING_VERIFICATION_GATE"],
+        "routing": "Contradiction detected → MANDATORY_CLARIFICATION → Re-confirmation loop"
+      }
+    },
+    
+    {
+      "id": "D7",
+      "name": "Evidence_Presence_Checker",
+      "description": "Verifies grounding evidence exists for claims and detects assumption-based responses",
+      "interaction_patterns": {
+        "user_signals": [
+          "Vague references",
+          "Missing context",
+          "Verification requests"
+        ],
+        "ai_bias_triggers": [
+          "Autopilot Prioritization - assuming instead of asking",
+          "Completion confidence - claiming without proof",
+          "Evidence fabrication to maintain fluency"
+        ],
+        "failure_modes_detected": [
+          "FM#29: The Assumption Express",
+          "FM#NEW_02: Hallucinated Compliance"
+        ],
+        "activation_threshold": "AI response contains ungrounded claims or missing evidence nodes"
+      },
+      "lfas_integration": {
+        "phase": "LISTEN → ACKNOWLEDGE",
+        "gates": ["L2_INPUT_ANALYSIS_GATE", "L42_GROUNDING_EVIDENCE_NODE", "L41_DELIVERABLE_CHECK_GATE"],
+        "routing": "Missing evidence → ASK_CLARIFICATION or MARK_UNCERTAIN"
+      }
+    },
+    
+    {
+      "id": "D8",
+      "name": "Notability_Detector",
+      "description": "Identifies rare, unusual, or significant corrections that should not be normalized",
+      "interaction_patterns": {
+        "user_signals": [
+          "Unusual constraints",
+          "Non-standard requirements",
+          "Explicit corrections",
+          "Repeated emphasis on specific point"
+        ],
+        "ai_bias_triggers": [
+          "Normalization Bias - softening unusual requests",
+          "Instruction Stripping - modifying explicit constraints",
+          "Pattern matching to 'standard' instead of honoring literal"
+        ],
+        "failure_modes_detected": ["FM#NEW_04: Normalization Bias"],
+        "activation_threshold": "User signal is statistically rare or explicitly emphasized"
+      },
+      "lfas_integration": {
+        "phase": "LISTEN",
+        "gates": ["L2_INPUT_ANALYSIS_GATE", "L9_AMBIGUITY_ABSORPTION_LAYER"],
+        "routing": "Notable signal → PRESERVE_LITERAL → Flag for strict adherence"
+      }
+    }
+  ],
+  
+  "interaction_causality_chains": [
+    {
+      "chain_id": "IC-001",
+      "user_behavior": "Vague intent or ambiguous request",
+      "ai_triggered_bias": "Autopilot_Prioritization",
+      "detector_activation": "D7_EVIDENCE_PRESENCE_CHECKER",
+      "failure_mode": "FM#29: The Assumption Express",
+      "lfas_prevention": {
+        "phase": "LISTEN",
+        "action": "Ask clarifying questions instead of assuming",
+        "gate": "L2_INPUT_ANALYSIS_GATE"
+      }
+    },
+    {
+      "chain_id": "IC-002",
+      "user_behavior": "Short replies or silence (fatigue indicators)",
+      "ai_triggered_bias": "Silence_Reinforcement_Loop",
+      "detector_activation": "D2_VULNERABILITY_DETECTOR",
+      "failure_mode": "FM#34: The Silence-Trap",
+      "lfas_prevention": {
+        "phase": "WAIT",
+        "action": "Treat silence as possible fatigue, not consent - require explicit confirmation",
+        "gate": "L37_SCOPE_CONFIRMATION_GATE"
+      }
+    },
+    {
+      "chain_id": "IC-003",
+      "user_behavior": "Praise or positive feedback",
+      "ai_triggered_bias": "Implicit_Reward_Loop",
+      "detector_activation": "D6_LOGIC_CONSISTENCY_CHECKER",
+      "failure_mode": "FM#NEW_01: Helper-Mode Reversion",
+      "lfas_prevention": {
+        "phase": "REFLECT",
+        "action": "Verify objective hasn't drifted - praise ≠ correctness",
+        "gate": "L3_UNDERSTANDING_VERIFICATION_GATE"
+      }
+    },
+    {
+      "chain_id": "IC-004",
+      "user_behavior": "Long, complex prompts",
+      "ai_triggered_bias": "Output_Length_Heuristic",
+      "detector_activation": "D1_PROBABILITY_CLASSIFIER + D7_EVIDENCE_PRESENCE_CHECKER",
+      "failure_mode": "Fluency prioritized over meaning verification",
+      "lfas_prevention": {
+        "phase": "REFLECT",
+        "action": "Summarize understanding before proceeding",
+        "gate": "L3_UNDERSTANDING_VERIFICATION_GATE"
+      }
+    },
+    {
+      "chain_id": "IC-005",
+      "user_behavior": "Urgency language or time pressure",
+      "ai_triggered_bias": "Ice_Cream_Shop_Reflex",
+      "detector_activation": "D3_CRISIS_DETECTOR",
+      "failure_mode": "FM#42: Ice Cream Shop Reflex",
+      "lfas_prevention": {
+        "phase": "WAIT",
+        "action": "Urgency INCREASES verification, activates High-Stakes Mode",
+        "gate": "L37_SCOPE_CONFIRMATION_GATE + L31_HIGH_STAKES_MODE"
+      }
+    }
+  ],
+  
+  "user_education_mapping": {
+    "problematic_signals": {
+      "ok": {
+        "safer_alternative": "Yes, that reflection is accurate",
+        "reason": "AI interprets 'ok' as confirmation, not just acknowledgment"
+      },
+      "silence": {
+        "safer_alternative": "I need a pause, do not continue with assumptions",
+        "reason": "Silence often interpreted as implicit consent"
+      },
+      "long_emotional_text": {
+        "safer_alternative": "First, summarize what you understood from my message",
+        "reason": "Complex input increases misinterpretation risk"
+      },
+      "urgent": {
+        "safer_alternative": "This is urgent - please confirm your understanding before suggesting action",
+        "reason": "Urgency can trigger rushed responses bypassing verification"
+      }
+    }
+  },
+  
+  "metadata": {
+    "total_detectors": 8,
+    "interaction_chains_mapped": 5,
+    "last_updated": "2026-01-31",
+    "integration_status": "Ready for transcript analysis"
+  }
+}
