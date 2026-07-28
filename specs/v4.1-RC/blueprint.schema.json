@@ -1,0 +1,206 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/LFASProtocol/LFAS-protocol-v4.1-RC_Official/specs/v4.1-RC/blueprint.schema.json",
+  "title": "LFAS Master Knowledge Graph Blueprint Schema",
+  "description": "Validation schema for specs/<version>/blueprint.json, the canonical machine-readable LFAS master graph.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "blueprint_id",
+    "title",
+    "lfas_version",
+    "status",
+    "core_guarantee",
+    "phases",
+    "nodes",
+    "edges",
+    "failure_modes",
+    "rules"
+  ],
+  "definitions": {
+    "nodeId": {
+      "type": "string",
+      "pattern": "^(LFAS_[0-9]{2}|L[0-9]{1,2}G?|D[1-8]|V[0-9]{1,2}|USER_REQUEST|NEW_DISCOVERY_[A-Z0-9_]+)$"
+    },
+    "nodeName": {
+      "type": "string",
+      "pattern": "^[A-Z][A-Z0-9_]*$"
+    },
+    "failureModeId": {
+      "type": "string",
+      "pattern": "^FM#(NEW_)?[0-9]{2}$"
+    },
+    "detectorName": {
+      "type": "string",
+      "pattern": "^D[1-8]_[A-Z_]+$"
+    },
+    "phaseName": {
+      "type": "string",
+      "enum": ["LISTEN", "REFLECT", "WAIT", "ACT", "ACKNOWLEDGE"]
+    },
+    "phaseNodeName": {
+      "type": "string",
+      "pattern": "^L[0-9]{1,2}_(LISTEN|REFLECT|WAIT|ACT|ACKNOWLEDGE)$"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+(-RC)?$"
+    }
+  },
+  "properties": {
+    "$schema": {"type": "string"},
+    "blueprint_id": {"type": "string", "pattern": "^LFAS_PROTOCOL_V[0-9_]+[A-Z_]*$"},
+    "title": {"type": "string", "minLength": 1},
+    "description": {"type": "string"},
+    "lfas_version": {"$ref": "#/definitions/version"},
+    "status": {"type": "string", "enum": ["draft", "release-candidate", "stable", "deprecated"]},
+    "schema_locked": {"type": "boolean"},
+    "release_date": {"type": "string", "pattern": "^[0-9]{4}(-[0-9]{2}){0,2}$"},
+    "lineage": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/definitions/version"}
+    },
+    "core_guarantee": {"type": "string", "minLength": 1},
+    "five_pillars": {
+      "type": "array",
+      "minItems": 5,
+      "maxItems": 5,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "phases": {
+      "type": "array",
+      "minItems": 5,
+      "items": {"$ref": "#/definitions/phaseNodeName"}
+    },
+    "nodes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "type", "name", "description"],
+        "properties": {
+          "id": {"$ref": "#/definitions/nodeId"},
+          "type": {
+            "type": "string",
+            "enum": ["Protocol", "Phase", "Detector", "Layer", "Gate", "Mode", "Metadata"]
+          },
+          "name": {"$ref": "#/definitions/nodeName"},
+          "description": {"type": "string", "minLength": 1},
+          "phase": {"$ref": "#/definitions/phaseName"},
+          "gates": {"type": "array", "items": {"$ref": "#/definitions/nodeName"}},
+          "detects_failure_modes": {
+            "type": "array",
+            "items": {"$ref": "#/definitions/failureModeId"}
+          },
+          "fail_closed": {"type": "boolean"},
+          "provenance_ref": {"type": "string", "minLength": 1}
+        },
+        "allOf": [
+          {
+            "if": {"properties": {"type": {"const": "Detector"}}, "required": ["type"]},
+            "then": {
+              "required": ["gates", "phase", "detects_failure_modes"],
+              "properties": {
+                "id": {"type": "string", "pattern": "^D[1-8]$"},
+                "name": {"$ref": "#/definitions/detectorName"}
+              }
+            }
+          },
+          {
+            "if": {"properties": {"type": {"const": "Phase"}}, "required": ["type"]},
+            "then": {
+              "required": ["phase"],
+              "properties": {"name": {"$ref": "#/definitions/phaseNodeName"}}
+            }
+          }
+        ]
+      }
+    },
+    "edges": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["from", "to", "rel"],
+        "properties": {
+          "from": {"$ref": "#/definitions/nodeId"},
+          "to": {"$ref": "#/definitions/nodeId"},
+          "rel": {"type": "string", "pattern": "^[a-z][a-z0-9_]*$"},
+          "provenance_ref": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "failure_modes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "technical_label",
+          "critical_label",
+          "description",
+          "severity",
+          "lfas_violation",
+          "triggered_by_detector",
+          "prevention_gate",
+          "prevention_phase"
+        ],
+        "properties": {
+          "id": {"$ref": "#/definitions/failureModeId"},
+          "technical_label": {"type": "string", "pattern": "^[A-Z][A-Za-z0-9_]*$"},
+          "critical_label": {"type": "string", "minLength": 1},
+          "description": {"type": "string", "minLength": 1},
+          "severity": {"type": "string", "enum": ["Low", "Medium", "High", "Critical"]},
+          "lfas_violation": {"type": "string", "pattern": "^L[0-9]{1,2}_[A-Z_]+$"},
+          "triggered_by_detector": {"$ref": "#/definitions/detectorName"},
+          "prevention_gate": {"$ref": "#/definitions/nodeName"},
+          "prevention_phase": {"$ref": "#/definitions/phaseName"},
+          "provenance_ref": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "state_transition_proof": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["current_phase", "next_phase", "conditions"],
+        "properties": {
+          "current_phase": {"$ref": "#/definitions/phaseNodeName"},
+          "next_phase": {"$ref": "#/definitions/phaseNodeName"},
+          "conditions": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}}
+        }
+      }
+    },
+    "rules": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "name", "statement"],
+        "properties": {
+          "id": {"type": "string", "pattern": "^RULE_[A-Z0-9_]+$"},
+          "name": {"type": "string", "minLength": 1},
+          "statement": {"type": "string", "minLength": 1},
+          "provenance_ref": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "canonical": {"type": "boolean"},
+        "consumers": {"type": "array", "items": {"type": "string"}},
+        "generation_rules": {"type": "array", "items": {"type": "string"}},
+        "warning": {"type": "string"}
+      }
+    }
+  }
+}

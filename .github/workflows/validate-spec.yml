@@ -1,0 +1,53 @@
+name: validate-spec
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  validate-json:
+    name: Validate blueprint JSON
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: python -m pip install --disable-pip-version-check jsonschema==4.23.0
+      - name: Parse every tracked JSON file
+        run: |
+          set -euo pipefail
+          git ls-files -z '*.json' | xargs -0 -I{} python -c "import json,sys; json.load(open(sys.argv[1])); print('parsed', sys.argv[1])" {}
+      - name: Validate blueprint against schema
+        run: python tools/validate_blueprint.py specs/v4.1-RC/blueprint.json
+
+  filename-policy:
+    name: Filename policy and references
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Check filenames
+        run: python tools/check_filenames.py
+      - name: Check documentation cross-references
+        run: python tools/check_references.py
+
+  lint-markdown:
+    name: Lint Markdown
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install markdownlint-cli
+        run: npm install -g markdownlint-cli@0.42.0
+      - name: Run markdownlint
+        run: markdownlint --config .markdownlint.json '**/*.md'

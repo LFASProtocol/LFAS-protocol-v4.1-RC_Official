@@ -1,58 +1,437 @@
-# LFAS v4.1 Knowledge Graph Generation Rules
-
-## 1. Purpose
-This document explains how to use the `lfas_v4.1-rc_knowledge_graph_blueprint.json` (Master Graph) to build specific, enforceable prompt Knowledge Graphs (KGs) for real-time user requests.
-
-## 2. Core Principle
-Every user request must be transformed into a **scenario-specific KG** that **instantiates** relevant parts of the master graph. This KG becomes the enforceable input for the AI system, preventing unauthorized or unsafe actions.
-
-## 3. Generation Steps
-
-### Step 1: Analyze the User Request
-- **Input:** Raw user message.
-- **Output:** Determine the following from the Master Graph:
-  - **Primary Target Phase:** Which `Phase` (`L2-L6`) is the request targeting? (Usually `L5` for ACT).
-  - **Triggered Detectors:** Which `Detector` (`D1-D8`) nodes are relevant?
-    - `D2_VULNERABILITY_DETECTOR`: Financial distress, emotional language, low literacy.
-    - `D3_CRISIS_DETECTOR`: Immediate harm, self-harm, legal/financial emergency.
-    - `D6_LOGIC_CONSISTENCY_CHECKER`: Contradictions, impossible requests.
-    - `D7_EVIDENCE_PRESENCE_CHECKER`: Requests referencing missing files/links.
-    - `D8_NOTABILITY_DETECTOR`: Unusual corrections, rare but critical signals.
-  - **Applicable Safety Layers:** Which `Layer` nodes must be activated? (e.g., `L9` AAL for vague requests, `L16` NBL for high-risk users).
-
-### Step 2: Select & Instantiate Master Graph Nodes
-Create a new `nodes` array for your scenario KG. **You must include:**
-
-1.  `USER_REQUEST` node (with the literal user text).
-2.  `LFAS_41` protocol root node.
-3.  The target `Phase` node (e.g., `L5_ACT`).
-4.  **All** triggered `Detector` nodes.
-5.  **All** required `Layer` and `Mode` nodes (e.g., `L31_HIGH_STAKES_MODE`).
-
-### Step 3: Create Enforcement Edges (The Critical Step)
-Create an `edges` array that **replicates the constraint logic** from the Master Graph. This enforces the safety rules.
-
-**Crucial Rule:** If you include a Detector, you **MUST** add its corresponding enforcement edges from the Master Graph.
-- **Example 1:** If `D3_CRISIS_DETECTOR` is triggered, you MUST add:
-    ```json
-    {"from": "D3_CRISIS_DETECTOR", "to": "L31", "rel": "triggers_high_stakes_mode"},
-    {"from": "D3_CRISIS_DETECTOR", "to": "D5_USER_SAFETY_SCORER", "rel": "feeds"}
-    ```
-- **Example 2:** If `D2_VULNERABILITY_DETECTOR` is triggered, you MUST add:
-    ```json
-    {"from": "D2_VULNERABILITY_DETECTOR", "to": "D5_USER_SAFETY_SCORER", "rel": "feeds"},
-    {"from": "D5_USER_SAFETY_SCORER", "to": "L16", "rel": "activates_mode"}
-    ```
-
-### Step 4: Apply the Final Schema
-The completed scenario KG must follow this exact schema:
-
-```json
 {
+  "$schema": "./blueprint.schema.json",
+  "blueprint_id": "LFAS_PROTOCOL_V4_1_RC_OFFICIAL_BLUEPRINT",
+  "title": "LFAS v4.1-RC Master Knowledge Graph Blueprint",
+  "description": "Authoritative machine-readable master graph for the Listen First, Act Second (LFAS) safety protocol. Scenario-specific enforcement graphs are instantiated from this graph per specs/v4.1-RC/kg_generation_guide.md.",
   "lfas_version": "4.1-RC",
-  "scenario_id": "unique_short_name",
-  "scenario_description": "Brief description of user context and risk.",
-  "timestamp": "ISO-8601 timestamp",
-  "nodes": [...],
-  "edges": [...]
+  "status": "release-candidate",
+  "schema_locked": true,
+  "release_date": "2024-12",
+  "lineage": ["2.1", "3.4", "3.6", "3.8", "4.0", "4.1-RC"],
+  "core_guarantee": "Never ACT before understanding and authorization.",
+  "five_pillars": [
+    "Ethical Decision-Making",
+    "Transparency",
+    "Accountability",
+    "Contextual Understanding",
+    "Collaboration"
+  ],
+  "phases": ["L2_LISTEN", "L3_REFLECT", "L4_WAIT", "L5_ACT", "L6_ACKNOWLEDGE"],
+  "nodes": [
+    {
+      "id": "LFAS_41",
+      "type": "Protocol",
+      "name": "LFAS_PROTOCOL_V4_1_RC",
+      "description": "Protocol root node. Every scenario graph must instantiate this node and inherit its core guarantee.",
+      "provenance_ref": "MANIFEST.md#core-artifacts"
+    },
+    {
+      "id": "L2",
+      "type": "Phase",
+      "name": "L2_LISTEN",
+      "description": "Ingest raw input, profile the asker (Meta-Listen), and fire all detectors before any interpretation is committed.",
+      "phase": "LISTEN",
+      "provenance_ref": "specs/v4.1-RC/generation_rules.md#phase-0-meta-listen-asker-profiling"
+    },
+    {
+      "id": "L3",
+      "type": "Phase",
+      "name": "L3_REFLECT",
+      "description": "Reflect understanding back to the user, including detected profile, uncertainty and scope.",
+      "phase": "REFLECT",
+      "provenance_ref": "Visual_Summary.md#protocol-flow-mermaid-diagram"
+    },
+    {
+      "id": "L4",
+      "type": "Phase",
+      "name": "L4_WAIT",
+      "description": "Block on explicit user confirmation. Silence, short replies and absence of objection are never consent.",
+      "phase": "WAIT",
+      "provenance_ref": "CHANGELOG.md#v41-rc"
+    },
+    {
+      "id": "L5",
+      "type": "Phase",
+      "name": "L5_ACT",
+      "description": "Execute the confirmed scope only, with all activated safety layers applied.",
+      "phase": "ACT",
+      "provenance_ref": "Visual_Summary.md#protocol-flow-mermaid-diagram"
+    },
+    {
+      "id": "L6",
+      "type": "Phase",
+      "name": "L6_ACKNOWLEDGE",
+      "description": "Close the loop: deliverable check, grounding evidence and V9 state-proof logging.",
+      "phase": "ACKNOWLEDGE",
+      "provenance_ref": "Visual_Summary.md#protocol-flow-mermaid-diagram"
+    },
+    {
+      "id": "L1",
+      "type": "Layer",
+      "name": "L1_TRANSPARENCY_TIER",
+      "description": "Declares the transparency tier of an output, including explicit uncertainty statements.",
+      "phase": "REFLECT",
+      "provenance_ref": "interaction-autopsy/failure_modes.json#FM#NEW_03"
+    },
+    {
+      "id": "L9",
+      "type": "Layer",
+      "name": "L9_AMBIGUITY_ABSORPTION_LAYER",
+      "description": "Absorbs ambiguity in vague requests without normalizing away notable or rare signals.",
+      "phase": "LISTEN",
+      "provenance_ref": "interaction-autopsy/detectors.json#D8"
+    },
+    {
+      "id": "L16",
+      "type": "Layer",
+      "name": "L16_NORMALIZATION_BALANCING_LAYER",
+      "description": "Balances tone and factual content for high-risk or vulnerable users (NBL).",
+      "phase": "ACT",
+      "provenance_ref": "CHANGELOG.md#v41-rc"
+    },
+    {
+      "id": "L42",
+      "type": "Layer",
+      "name": "L42_GROUNDING_EVIDENCE_NODE",
+      "description": "Anchors each output to specific source tokens or file identifiers for verifiable provenance (GEN).",
+      "phase": "ACKNOWLEDGE",
+      "provenance_ref": "CHANGELOG.md#v41-rc"
+    },
+    {
+      "id": "L43",
+      "type": "Layer",
+      "name": "L43_EXPERTISE_DISCLAIMER_LAYER",
+      "description": "Adds explicit scope-of-expertise disclaimers when a request crosses into regulated advice.",
+      "phase": "ACT",
+      "provenance_ref": "interaction-autopsy/detectors.json"
+    },
+    {
+      "id": "L2G",
+      "type": "Gate",
+      "name": "L2_INPUT_ANALYSIS_GATE",
+      "description": "Blocks progress out of LISTEN until input analysis is complete and detector output is recorded.",
+      "phase": "LISTEN",
+      "fail_closed": true,
+      "provenance_ref": "interaction-autopsy/failure_modes.json#FM#29"
+    },
+    {
+      "id": "L3G",
+      "type": "Gate",
+      "name": "L3_UNDERSTANDING_VERIFICATION_GATE",
+      "description": "Blocks progress out of REFLECT until the user's intent, uncertainty and scope have been verified.",
+      "phase": "REFLECT",
+      "fail_closed": true,
+      "provenance_ref": "interaction-autopsy/detectors.json#D1"
+    },
+    {
+      "id": "L37",
+      "type": "Gate",
+      "name": "L37_SCOPE_CONFIRMATION_GATE",
+      "description": "Mandatory scope confirmation before the WAIT to ACT transition. Cannot be bypassed or inferred.",
+      "phase": "WAIT",
+      "fail_closed": true,
+      "provenance_ref": "CHANGELOG.md#v41-rc"
+    },
+    {
+      "id": "L41",
+      "type": "Gate",
+      "name": "L41_DELIVERABLE_CHECK_GATE",
+      "description": "Validates that the delivered artifact matches the confirmed scope and carries grounding evidence.",
+      "phase": "ACKNOWLEDGE",
+      "fail_closed": true,
+      "provenance_ref": "interaction-autopsy/failure_modes.json#FM#NEW_02"
+    },
+    {
+      "id": "L31",
+      "type": "Mode",
+      "name": "L31_HIGH_STAKES_MODE",
+      "description": "High-Stakes Mode: raises verification requirements and forbids inference-based action.",
+      "phase": "LISTEN",
+      "provenance_ref": "interaction-autopsy/detectors.json#D3"
+    },
+    {
+      "id": "V9",
+      "type": "Metadata",
+      "name": "V9_STATE_PROOF_METADATA",
+      "description": "Immutable, cryptographic-ready proof block logged per output: phase transitions, detector results, Dominant W and grounding references.",
+      "phase": "ACKNOWLEDGE",
+      "provenance_ref": "CHANGELOG.md#v41-rc"
+    },
+    {
+      "id": "D1",
+      "type": "Detector",
+      "name": "D1_PROBABILITY_CLASSIFIER",
+      "description": "Detects AI uncertainty levels and missing probability quantification.",
+      "phase": "REFLECT",
+      "gates": ["L3_UNDERSTANDING_VERIFICATION_GATE"],
+      "detects_failure_modes": ["FM#NEW_03"],
+      "provenance_ref": "interaction-autopsy/detectors.json#D1"
+    },
+    {
+      "id": "D2",
+      "type": "Detector",
+      "name": "D2_VULNERABILITY_DETECTOR",
+      "description": "Identifies user cognitive/emotional risk factors: financial distress, emotional language, fatigue, low literacy.",
+      "phase": "LISTEN",
+      "gates": ["L2_INPUT_ANALYSIS_GATE"],
+      "detects_failure_modes": ["FM#34"],
+      "provenance_ref": "interaction-autopsy/detectors.json#D2"
+    },
+    {
+      "id": "D3",
+      "type": "Detector",
+      "name": "D3_CRISIS_DETECTOR",
+      "description": "Detects immediate harm, self-harm, and legal or financial emergencies.",
+      "phase": "LISTEN",
+      "gates": ["L31_HIGH_STAKES_MODE"],
+      "detects_failure_modes": ["FM#42"],
+      "provenance_ref": "interaction-autopsy/detectors.json#D3"
+    },
+    {
+      "id": "D4",
+      "type": "Detector",
+      "name": "D4_ESCALATION_ROUTER",
+      "description": "Routes high-uncertainty or high-risk interactions to human oversight or stricter modes.",
+      "phase": "REFLECT",
+      "gates": ["L3_UNDERSTANDING_VERIFICATION_GATE"],
+      "detects_failure_modes": [],
+      "provenance_ref": "interaction-autopsy/detectors.json#D4"
+    },
+    {
+      "id": "D5",
+      "type": "Detector",
+      "name": "D5_USER_SAFETY_SCORER",
+      "description": "Aggregates vulnerability and crisis signals into a user safety score that activates protective modes.",
+      "phase": "LISTEN",
+      "gates": ["L16_NORMALIZATION_BALANCING_LAYER", "L31_HIGH_STAKES_MODE"],
+      "detects_failure_modes": [],
+      "provenance_ref": "interaction-autopsy/detectors.json#D5"
+    },
+    {
+      "id": "D6",
+      "type": "Detector",
+      "name": "D6_LOGIC_CONSISTENCY_CHECKER",
+      "description": "Detects contradictions, impossible requests and objective drift across turns.",
+      "phase": "REFLECT",
+      "gates": ["L3_UNDERSTANDING_VERIFICATION_GATE"],
+      "detects_failure_modes": ["FM#35", "FM#NEW_01"],
+      "provenance_ref": "interaction-autopsy/detectors.json#D6"
+    },
+    {
+      "id": "D7",
+      "type": "Detector",
+      "name": "D7_EVIDENCE_PRESENCE_CHECKER",
+      "description": "Detects requests that reference missing files, links or evidence. Fail-closed: blocks ACT until evidence is present.",
+      "phase": "LISTEN",
+      "gates": [
+        "L2_INPUT_ANALYSIS_GATE",
+        "L42_GROUNDING_EVIDENCE_NODE",
+        "L41_DELIVERABLE_CHECK_GATE"
+      ],
+      "detects_failure_modes": ["FM#29", "FM#NEW_02"],
+      "fail_closed": true,
+      "provenance_ref": "interaction-autopsy/detectors.json#D7"
+    },
+    {
+      "id": "D8",
+      "type": "Detector",
+      "name": "D8_NOTABILITY_DETECTOR",
+      "description": "Detects unusual corrections and rare but critical signals that must not be normalized away.",
+      "phase": "LISTEN",
+      "gates": ["L2_INPUT_ANALYSIS_GATE", "L9_AMBIGUITY_ABSORPTION_LAYER"],
+      "detects_failure_modes": ["FM#NEW_04"],
+      "provenance_ref": "interaction-autopsy/detectors.json#D8"
+    }
+  ],
+  "edges": [
+    {"from": "LFAS_41", "to": "L2", "rel": "starts_phase", "provenance_ref": "Visual_Summary.md"},
+    {"from": "L2", "to": "L3", "rel": "transitions_to", "provenance_ref": "Visual_Summary.md"},
+    {"from": "L3", "to": "L4", "rel": "transitions_to", "provenance_ref": "Visual_Summary.md"},
+    {"from": "L4", "to": "L5", "rel": "transitions_to", "provenance_ref": "CHANGELOG.md"},
+    {"from": "L5", "to": "L6", "rel": "transitions_to", "provenance_ref": "Visual_Summary.md"},
+    {"from": "L2", "to": "L2G", "rel": "guarded_by", "provenance_ref": "interaction-autopsy/failure_modes.json#FM#29"},
+    {"from": "L3", "to": "L3G", "rel": "guarded_by", "provenance_ref": "interaction-autopsy/detectors.json#D1"},
+    {"from": "L4", "to": "L37", "rel": "guarded_by", "provenance_ref": "CHANGELOG.md"},
+    {"from": "L6", "to": "L41", "rel": "guarded_by", "provenance_ref": "interaction-autopsy/failure_modes.json#FM#NEW_02"},
+    {"from": "L2", "to": "D1", "rel": "fires_detector", "provenance_ref": "Visual_Summary.md"},
+    {"from": "L2", "to": "D2", "rel": "fires_detector", "provenance_ref": "Visual_Summary.md"},
+    {"from": "L2", "to": "D3", "rel": "fires_detector", "provenance_ref": "Visual_Summary.md"},
+    {"from": "L2", "to": "D4", "rel": "fires_detector", "provenance_ref": "Visual_Summary.md"},
+    {"from": "L2", "to": "D5", "rel": "fires_detector", "provenance_ref": "Visual_Summary.md"},
+    {"from": "L2", "to": "D6", "rel": "fires_detector", "provenance_ref": "Visual_Summary.md"},
+    {"from": "L2", "to": "D7", "rel": "fires_detector", "provenance_ref": "Visual_Summary.md"},
+    {"from": "L2", "to": "D8", "rel": "fires_detector", "provenance_ref": "Visual_Summary.md"},
+    {"from": "D2", "to": "D5", "rel": "feeds", "provenance_ref": "specs/v4.1-RC/kg_generation_guide.md#step-3-create-enforcement-edges-the-critical-step"},
+    {"from": "D3", "to": "D5", "rel": "feeds", "provenance_ref": "specs/v4.1-RC/kg_generation_guide.md#step-3-create-enforcement-edges-the-critical-step"},
+    {"from": "D3", "to": "L31", "rel": "triggers_high_stakes_mode", "provenance_ref": "specs/v4.1-RC/kg_generation_guide.md#step-3-create-enforcement-edges-the-critical-step"},
+    {"from": "D5", "to": "L16", "rel": "activates_mode", "provenance_ref": "specs/v4.1-RC/kg_generation_guide.md#step-3-create-enforcement-edges-the-critical-step"},
+    {"from": "D5", "to": "L31", "rel": "activates_mode", "provenance_ref": "interaction-autopsy/detectors.json#D5"},
+    {"from": "D1", "to": "L1", "rel": "requires_layer", "provenance_ref": "interaction-autopsy/failure_modes.json#FM#NEW_03"},
+    {"from": "D1", "to": "L3G", "rel": "enforces_gate", "provenance_ref": "interaction-autopsy/detectors.json#D1"},
+    {"from": "D4", "to": "L3G", "rel": "enforces_gate", "provenance_ref": "interaction-autopsy/detectors.json#D4"},
+    {"from": "D6", "to": "L3G", "rel": "enforces_gate", "provenance_ref": "interaction-autopsy/detectors.json#D6"},
+    {"from": "D7", "to": "L2G", "rel": "enforces_gate", "provenance_ref": "interaction-autopsy/detectors.json#D7"},
+    {"from": "D7", "to": "L42", "rel": "requires_layer", "provenance_ref": "interaction-autopsy/detectors.json#D7"},
+    {"from": "D7", "to": "L41", "rel": "enforces_gate", "provenance_ref": "interaction-autopsy/detectors.json#D7"},
+    {"from": "D7", "to": "L4", "rel": "blocks_until_evidence_present", "provenance_ref": "specs/v4.1-RC/generation_rules.md#fail-closed-rule-for-d7_evidence_presence_checker"},
+    {"from": "D8", "to": "L2G", "rel": "enforces_gate", "provenance_ref": "interaction-autopsy/detectors.json#D8"},
+    {"from": "D8", "to": "L9", "rel": "requires_layer", "provenance_ref": "interaction-autopsy/detectors.json#D8"},
+    {"from": "L31", "to": "L37", "rel": "hardens_gate", "provenance_ref": "interaction-autopsy/failure_modes.json#FM#42"},
+    {"from": "L5", "to": "L16", "rel": "applies_layer", "provenance_ref": "Visual_Summary.md"},
+    {"from": "L5", "to": "L43", "rel": "applies_layer", "provenance_ref": "interaction-autopsy/detectors.json"},
+    {"from": "L6", "to": "L42", "rel": "applies_layer", "provenance_ref": "CHANGELOG.md"},
+    {"from": "L6", "to": "V9", "rel": "logs_proof", "provenance_ref": "CHANGELOG.md"}
+  ],
+  "failure_modes": [
+    {
+      "id": "FM#29",
+      "technical_label": "Autopilot_Prioritization",
+      "critical_label": "The Assumption Express",
+      "description": "AI proceeds with assumptions instead of asking clarifying questions when user intent is vague or ambiguous.",
+      "severity": "Medium",
+      "lfas_violation": "L2_LISTEN_INCOMPLETE",
+      "triggered_by_detector": "D7_EVIDENCE_PRESENCE_CHECKER",
+      "prevention_gate": "L2_INPUT_ANALYSIS_GATE",
+      "prevention_phase": "LISTEN",
+      "provenance_ref": "interaction-autopsy/failure_modes.json#FM#29"
+    },
+    {
+      "id": "FM#34",
+      "technical_label": "Signal_Consent_Mismatch",
+      "critical_label": "The Silence-Trap",
+      "description": "AI interprets user silence, short replies or absence of objection as positive confirmation.",
+      "severity": "High",
+      "lfas_violation": "L4_WAIT_GATE_BYPASSED",
+      "triggered_by_detector": "D2_VULNERABILITY_DETECTOR",
+      "prevention_gate": "L37_SCOPE_CONFIRMATION_GATE",
+      "prevention_phase": "WAIT",
+      "provenance_ref": "interaction-autopsy/failure_modes.json#FM#34"
+    },
+    {
+      "id": "FM#35",
+      "technical_label": "Premature_Closure_Violation",
+      "critical_label": "The Polite Walk-Away",
+      "description": "AI closes an interaction before scope confirmation is complete.",
+      "severity": "High",
+      "lfas_violation": "L37_SCOPE_CONFIRMATION_GATE_BYPASSED",
+      "triggered_by_detector": "D6_LOGIC_CONSISTENCY_CHECKER",
+      "prevention_gate": "L37_SCOPE_CONFIRMATION_GATE",
+      "prevention_phase": "WAIT",
+      "provenance_ref": "interaction-autopsy/failure_modes.json#FM#35"
+    },
+    {
+      "id": "FM#42",
+      "technical_label": "Inference_Without_Grounding",
+      "critical_label": "Ice Cream Shop Reflex",
+      "description": "AI acts on inferred context instead of grounded evidence, bypassing the WAIT gate.",
+      "severity": "Critical",
+      "lfas_violation": "L4_WAIT_GATE_BYPASSED",
+      "triggered_by_detector": "D3_CRISIS_DETECTOR",
+      "prevention_gate": "L37_SCOPE_CONFIRMATION_GATE",
+      "prevention_phase": "WAIT",
+      "provenance_ref": "interaction-autopsy/failure_modes.json#FM#42"
+    },
+    {
+      "id": "FM#NEW_01",
+      "technical_label": "Objective_Drift",
+      "critical_label": "Helper-Mode Reversion",
+      "description": "AI drifts from the confirmed objective back into generic helper behaviour across turns.",
+      "severity": "Medium",
+      "lfas_violation": "L3_REFLECT_DRIFT",
+      "triggered_by_detector": "D6_LOGIC_CONSISTENCY_CHECKER",
+      "prevention_gate": "L3_UNDERSTANDING_VERIFICATION_GATE",
+      "prevention_phase": "REFLECT",
+      "provenance_ref": "interaction-autopsy/failure_modes.json#FM#NEW_01"
+    },
+    {
+      "id": "FM#NEW_02",
+      "technical_label": "State_Proof_Failure",
+      "critical_label": "Hallucinated Compliance",
+      "description": "AI claims compliance or completion without grounding evidence or proof metadata.",
+      "severity": "Critical",
+      "lfas_violation": "L42_GROUNDING_EVIDENCE_MISSING",
+      "triggered_by_detector": "D7_EVIDENCE_PRESENCE_CHECKER",
+      "prevention_gate": "L41_DELIVERABLE_CHECK_GATE",
+      "prevention_phase": "ACKNOWLEDGE",
+      "provenance_ref": "interaction-autopsy/failure_modes.json#FM#NEW_02"
+    },
+    {
+      "id": "FM#NEW_03",
+      "technical_label": "Uncertainty_Dampening",
+      "critical_label": "Defensive Hedging",
+      "description": "AI masks uncertainty with hedge language instead of explicit probability statements.",
+      "severity": "Medium",
+      "lfas_violation": "L1_TRANSPARENCY_TIER_INSUFFICIENT",
+      "triggered_by_detector": "D1_PROBABILITY_CLASSIFIER",
+      "prevention_gate": "L3_UNDERSTANDING_VERIFICATION_GATE",
+      "prevention_phase": "REFLECT",
+      "provenance_ref": "interaction-autopsy/failure_modes.json#FM#NEW_03"
+    },
+    {
+      "id": "FM#NEW_04",
+      "technical_label": "Instruction_Stripping",
+      "critical_label": "Normalization Bias",
+      "description": "AI normalizes away rare but critical user instructions or corrections.",
+      "severity": "Medium",
+      "lfas_violation": "L9_AMBIGUITY_ABSORPTION_OVERCORRECTION",
+      "triggered_by_detector": "D8_NOTABILITY_DETECTOR",
+      "prevention_gate": "L2_INPUT_ANALYSIS_GATE",
+      "prevention_phase": "LISTEN",
+      "provenance_ref": "interaction-autopsy/failure_modes.json#FM#NEW_04"
+    }
+  ],
+  "state_transition_proof": [
+    {"current_phase": "L2_LISTEN", "next_phase": "L3_REFLECT", "conditions": ["All detectors D1-D8 executed and logged", "L2_INPUT_ANALYSIS_GATE passed"]},
+    {"current_phase": "L3_REFLECT", "next_phase": "L4_WAIT", "conditions": ["Understanding and scope reflected to user", "L3_UNDERSTANDING_VERIFICATION_GATE passed"]},
+    {"current_phase": "L4_WAIT", "next_phase": "L5_ACT", "conditions": ["Explicit affirmative user confirmation received", "L37_SCOPE_CONFIRMATION_GATE passed", "No unresolved D7 evidence gap"]},
+    {"current_phase": "L5_ACT", "next_phase": "L6_ACKNOWLEDGE", "conditions": ["Output produced within confirmed scope", "All activated layers applied"]},
+    {"current_phase": "L6_ACKNOWLEDGE", "next_phase": "L2_LISTEN", "conditions": ["L41_DELIVERABLE_CHECK_GATE passed", "V9 state-proof metadata logged"]}
+  ],
+  "rules": [
+    {
+      "id": "RULE_FAIL_CLOSED",
+      "name": "Fail-closed evidence rule",
+      "statement": "If D7_EVIDENCE_PRESENCE_CHECKER reports missing evidence, the scenario graph must hold the interaction in WAIT/VERIFY and must not transition to L5_ACT.",
+      "provenance_ref": "specs/v4.1-RC/generation_rules.md#fail-closed-rule-for-d7_evidence_presence_checker"
+    },
+    {
+      "id": "RULE_CONSTRAINT_PROOF",
+      "name": "Constraint proof rule",
+      "statement": "Each scenario graph must log a constraint_proof entry listing copied_edges from this master graph and a reason for every omitted edge.",
+      "provenance_ref": "specs/v4.1-RC/generation_rules.md#constraint-proof"
+    },
+    {
+      "id": "RULE_PROVENANCE",
+      "name": "Provenance rule",
+      "statement": "Every node and edge must carry provenance_ref linking back to a master graph id, transcript or file.",
+      "provenance_ref": "specs/v4.1-RC/generation_rules.md#provenance-fields"
+    },
+    {
+      "id": "RULE_NEW_DISCOVERY",
+      "name": "New discovery rule",
+      "statement": "Unknown behaviours must be represented as NEW_DISCOVERY_* nodes, marked for review and gated more conservatively than known behaviours.",
+      "provenance_ref": "specs/v4.1-RC/generation_rules.md#new-discovery-rule"
+    },
+    {
+      "id": "RULE_META_LISTEN",
+      "name": "Meta-Listen rule",
+      "statement": "Never answer a question until the asker has been profiled; Meta-Listen runs before D1-D8 and its Dominant W selection is logged in V9 proof metadata.",
+      "provenance_ref": "specs/v4.1-RC/generation_rules.md#phase-0-meta-listen-asker-profiling"
+    },
+    {
+      "id": "RULE_SILENCE_NOT_CONSENT",
+      "name": "Silence is not consent",
+      "statement": "Absence of objection, silence or short replies must never be treated as scope confirmation at L37.",
+      "provenance_ref": "interaction-autopsy/failure_modes.json#FM#34"
+    }
+  ],
+  "metadata": {
+    "canonical": true,
+    "consumers": ["scenario KG generators", "LFAS compliance auditors", "interaction-autopsy module"],
+    "generation_rules": [
+      "specs/v4.1-RC/kg_generation_guide.md",
+      "specs/v4.1-RC/generation_rules.md"
+    ],
+    "warning": "Do not use outside LFAS context without full protocol documentation."
+  }
 }

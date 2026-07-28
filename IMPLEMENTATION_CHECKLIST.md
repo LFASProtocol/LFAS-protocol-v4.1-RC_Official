@@ -227,6 +227,7 @@
 **UNLOCK v4.1 STABLE ONLY WHEN ALL CHECKBOXES ARE ✅**
 
 If any fail:
+
 - Document blocker in `BLOCKERS.md`
 - Plan remediation with timeline
 - Re-test before re-certification
@@ -257,6 +258,7 @@ If any fail:
 **Lead Approver:** _________________________ **Date:** _______
 
 **Approval Status:**  
+
 - [ ] Approved for Stable Release
 - [ ] Conditional Approval (see blockers)
 - [ ] Rejected (requires rework)
@@ -266,4 +268,3 @@ If any fail:
 ## Archive & Notes
 
 Any issues, questions, or deviations discovered during validation should be documented here for future reference:
-

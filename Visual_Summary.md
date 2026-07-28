@@ -146,6 +146,6 @@ LFAS-protocol-v4.1-RC_Official/
 ├── VERSION_MATRIX.md ✅ FILE 3
 ├── IMPLEMENTATION_CHECKLIST.md ✅ FILE 4
 ├── ROADMAP.md ✅ FILE 5
-├── LFAS_v4.1-RC_Visual_Summary.md ✅ FILE 6
+├── Visual_Summary.md ✅ FILE 6
 └── specs/
 └── v4.1-RC/

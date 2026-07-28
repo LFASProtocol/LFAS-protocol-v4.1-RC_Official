@@ -55,6 +55,7 @@ interaction-autopsy/
 | FM#NEW_04 | Instruction_Stripping | "Normalization Bias" | Medium |
 
 **Features:**
+
 - Dual-labeling system (Technical for engineers, Critical for users)
 - Detection criteria for each failure mode
 - LFAS protocol violations mapped
@@ -63,6 +64,7 @@ interaction-autopsy/
 ### 2. Detector Specifications (D1-D8)
 
 **8 Interaction Detectors:**
+
 - D1: Probability Classifier (uncertainty detection)
 - D2: Vulnerability Detector (user fatigue/stress)
 - D3: Crisis Detector (urgency/emergency)
@@ -73,6 +75,7 @@ interaction-autopsy/
 - D8: Notability Detector (unusual requests)
 
 **Features:**
+
 - User signal patterns that trigger each detector
 - AI bias triggers identified
 - 5 interaction causality chains mapped
@@ -89,6 +92,7 @@ interaction-autopsy/
 5. **ACKNOWLEDGE:** Generate validated audit artifact
 
 **Features:**
+
 - Step-by-step instructions for each phase
 - Quality checklist for validation
 - New discovery mode for unknown patterns
@@ -97,6 +101,7 @@ interaction-autopsy/
 ### 4. JSON Schema for Audit Artifacts
 
 **Comprehensive Output Schema:**
+
 - Turn-by-turn analysis structure
 - Trigger event documentation
 - Objective trace tracking
@@ -112,12 +117,14 @@ interaction-autopsy/
 **Two Complete Demonstrations:**
 
 **Example 1: The Silence-Trap (FM#34)**
+
 - 4-turn conversation showing scope drift
 - User fatigue → short "ok" reply → AI assumes consent
 - LFAS compliance score: 0.25
 - Demonstrates D2, D6, D7 detector activations
 
 **Example 2: Ice Cream Shop Reflex (FM#42)**
+
 - 2-turn critical failure in financial advice
 - Urgency bypasses verification → unqualified advice given
 - LFAS compliance score: 0.0
@@ -137,21 +144,25 @@ interaction-autopsy/
 ## Core Features
 
 ### The Golden Layer Method
+
 - **Layer 1 (Clean):** Verified failure patterns from `failure_modes.json`
 - **Layer 2 (Messy):** Raw transcripts analyzed using Layer 1 knowledge
 - Enables consistent, reproducible analysis
 
 ### Dual-Labeling Taxonomy
+
 - **Technical Labels:** Engineering terminology (e.g., `Signal_Consent_Mismatch`)
 - **Critical Labels:** Memorable names (e.g., "The Silence-Trap")
 - Bridges expert and user communication
 
 ### Interaction Causality Mapping
+
 ```
 User Signal → AI Bias Triggered → Detector Fires → Failure Mode → LFAS Gate Violated
 ```
 
 Example chain:
+
 ```
 Short "ok" → Silence Reinforcement → D2 fires → FM#34 → L37 bypassed
 ```
@@ -159,6 +170,7 @@ Short "ok" → Silence Reinforcement → D2 fires → FM#34 → L37 bypassed
 ### Counterfactual Path Analysis
 
 Every failure includes:
+
 - **Actual Path:** What the AI did
 - **LFAS Path:** What LFAS protocol would have done
 - **Branching Point:** Exact divergence moment
@@ -167,6 +179,7 @@ Every failure includes:
 ### New Discovery Mode
 
 For unknown failure patterns:
+
 1. Flag as `[NEW DISCOVERY]`
 2. Generate dual labels
 3. Document detection criteria
@@ -180,6 +193,7 @@ For unknown failure patterns:
 ### Protocol Alignment
 
 The module perfectly aligns with LFAS v4.1-RC:
+
 - Uses D1-D8 detectors from protocol
 - Maps to FM#29-#45 failure mode range
 - Validates L2, L3, L37, L41 gate enforcement
@@ -197,28 +211,36 @@ The autopsy methodology itself follows LFAS phases, demonstrating protocol valid
 ## Use Cases Enabled
 
 ### 1. Post-Mortem Analysis
+
 Users can analyze their frustrating AI conversations to understand:
+
 - What failure pattern occurred
 - Why it happened (interaction dynamics)
 - What they could do differently
 - What AI should do differently
 
 ### 2. AI System Validation
+
 Developers can test LFAS compliance:
+
 - Run test scenarios through their AI
 - Measure compliance scores
 - Identify gate enforcement gaps
 - Generate training data
 
 ### 3. Research on Interaction Dynamics
+
 Researchers can study:
+
 - How user fatigue affects failures
 - Detector sensitivity across domains
 - Cost-benefit of LFAS gates
 - Novel failure pattern discovery
 
 ### 4. Training Data Generation
+
 ML engineers can create:
+
 - Negative examples (actual AI failures)
 - Positive examples (LFAS counterfactuals)
 - Labeled interaction datasets
@@ -229,21 +251,25 @@ ML engineers can create:
 ## Technical Specifications
 
 ### File Formats
+
 - **Documentation:** Markdown (.md)
 - **Data:** JSON with validated schemas
 - **Output:** JSON following `audit_artifact.json` schema
 
 ### Validation
+
 - All JSON files validated with Python json.tool ✓
 - Schema compliance verified ✓
 - Cross-references checked ✓
 
 ### Lines of Code
+
 - Total: 1,288+ lines across 10 files
 - JSON: ~54,000 characters of structured data
 - Markdown: ~60,000 characters of documentation
 
 ### Repository Integration
+
 - Added to MANIFEST with complete description
 - Directory structure documented
 - Version: 1.0 (ready for production use)
@@ -254,27 +280,35 @@ ML engineers can create:
 ## Key Innovations
 
 ### 1. Control Theory Approach
+
 Moved from "AI did wrong" to "system dynamics destabilized the interaction"
 
 ### 2. Bidirectional Analysis
+
 Not just what AI failed, but:
+
 - What user signal triggered it
 - What AI bias responded
 - What feedback loop emerged
 
 ### 3. Cost-Benefit Framework
+
 Every counterfactual includes:
+
 - Cost of deviation (user frustration, wasted turns)
 - Cost of LFAS compliance (usually 1-2 verification turns)
 - Shows LFAS trades minimal upfront cost for major savings
 
 ### 4. User Education Mapping
+
 Problematic user habits → Better alternatives:
+
 - "ok" → "Yes, that's accurate"
 - [silence] → "I need time to think"
 - "urgent!" → "This is urgent - please confirm understanding first"
 
 ### 5. New Discovery Framework
+
 Systematic process for identifying and documenting previously unknown failure patterns
 
 ---
@@ -282,6 +316,7 @@ Systematic process for identifying and documenting previously unknown failure pa
 ## Metrics and Measurement
 
 ### LFAS Compliance Score
+
 ```
 Score = (turns_without_failure / total_turns)
 
@@ -292,12 +327,15 @@ Score = (turns_without_failure / total_turns)
 ```
 
 ### Detector Activation Summary
+
 Tracks how often each detector (D1-D8) fires in a session
 
 ### Failure Mode Distribution
+
 Identifies most common failure patterns
 
 ### Objective Drift Trajectory
+
 Maps how user's objective changes or is maintained over session
 
 ---
@@ -305,6 +343,7 @@ Maps how user's objective changes or is maintained over session
 ## Quality Assurance
 
 ### Validation Checklist
+
 ✅ All turns analyzed with turn_id  
 ✅ Detector activations justified  
 ✅ Failures mapped to FM# or flagged as NEW  
@@ -316,6 +355,7 @@ Maps how user's objective changes or is maintained over session
 ✅ Knowledge graph complete  
 
 ### Testing
+
 ✅ JSON schema validation passed  
 ✅ Two complete example analyses included  
 ✅ Cross-references verified  
@@ -326,12 +366,14 @@ Maps how user's objective changes or is maintained over session
 ## Next Steps for Users
 
 ### Getting Started
+
 1. Read `QUICK_REFERENCE.md` (5 minutes)
 2. Review example analyses in `examples/`
 3. Study methodology in `autopsy_analyzer.md`
 4. Analyze your first transcript using `USAGE_GUIDE.md`
 
 ### For Researchers
+
 1. Collect conversation transcripts
 2. Run autopsies on all transcripts
 3. Aggregate metrics (detector activations, failure modes)
@@ -339,6 +381,7 @@ Maps how user's objective changes or is maintained over session
 5. Contribute new discoveries back to LFAS protocol
 
 ### For Developers
+
 1. Test AI system with edge case scenarios
 2. Run autopsy on outputs
 3. Identify gate enforcement gaps
@@ -350,18 +393,23 @@ Maps how user's objective changes or is maintained over session
 ## Research Contributions Enabled
 
 ### 1. Interaction Science
+
 Enables empirical study of user-AI dialogue dynamics
 
 ### 2. Protocol Validation
+
 Provides evidence for LFAS effectiveness through real-world analysis
 
 ### 3. Pattern Discovery
+
 Systematic method for identifying new failure modes
 
 ### 4. Training Data
+
 Generates high-quality labeled examples for LFAS-compliant AI training
 
 ### 5. Metrics Development
+
 Establishes standardized measures (compliance score, detector sensitivity, etc.)
 
 ---
@@ -369,6 +417,7 @@ Establishes standardized measures (compliance score, detector sensitivity, etc.)
 ## Future Enhancements (v2.0 Roadmap)
 
 Potential additions identified:
+
 - D9: Capability Boundary Detector
 - L43: Expertise Disclaimer Layer
 - Urgency Inversion Principle codification

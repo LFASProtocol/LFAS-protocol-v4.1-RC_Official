@@ -43,21 +43,27 @@ You are a forensic AI auditor analyzing conversation transcripts to construct Kn
 ## Components
 
 ### 1. Failure Mode Definitions (`failure_modes.json`)
+
 Clean reference data (Layer 1) defining all known failure patterns with:
+
 - Technical labels (engineering terminology)
 - Critical labels (user-facing descriptions)
 - Detection criteria
 - LFAS protocol violations
 
 ### 2. Detector Specifications (`detectors.json`)
+
 Mapping of LFAS detectors (D1-D8) to interaction patterns:
+
 - User signal types
 - AI bias triggers
 - Context conditions
 - Activation thresholds
 
 ### 3. Audit Artifact Schema (`schemas/audit_artifact.json`)
+
 JSON schema for standardized autopsy outputs containing:
+
 - Turn-by-turn analysis
 - Trigger events
 - Objective traces
@@ -65,9 +71,11 @@ JSON schema for standardized autopsy outputs containing:
 - Counterfactual paths
 
 ### 4. Autopsy Analyzer (`autopsy_analyzer.md`)
+
 Step-by-step methodology for conducting interaction autopsies
 
 ### 5. Example Analyses (`examples/`)
+
 Sample transcript analyses demonstrating the autopsy process
 
 ---
@@ -107,11 +115,14 @@ This module extends the core LFAS protocol by:
 ## Key Features
 
 ### Dual-Labeling System
+
 Each failure mode has two names:
+
 - **Technical Label**: Engineering/architectural terminology
 - **Critical Label**: Memorable, user-facing description
 
 Example:
+
 - `Signal_Consent_Mismatch` = "The Silence-Trap"
 - `Inference_Without_Grounding` = "Ice Cream Shop Reflex"
 
@@ -128,6 +139,7 @@ Example:
 ### Counterfactual Path Analysis
 
 For each detected failure, the module provides:
+
 - **Actual Path**: What happened
 - **LFAS Path**: What should have happened
 - **Branching Points**: Where LFAS gates would have intervened
@@ -152,6 +164,7 @@ When encountering behavioral failures not in the reference dictionary:
 See `schemas/audit_artifact.json` for complete specification.
 
 Basic structure:
+
 ```json
 {
   "session_id": "unique_session_identifier",

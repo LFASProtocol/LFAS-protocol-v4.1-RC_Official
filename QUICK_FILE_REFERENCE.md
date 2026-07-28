@@ -23,6 +23,7 @@ Is it a build/package file (Makefile, pyproject.toml)?
 ## ✅ COPY THESE (Recommended)
 
 ### Community Files
+
 ```
 CODE_OF_CONDUCT.md              → Establish community standards
 CONTRIBUTING.md                 → Guide contributors (adapt to spec repo)
@@ -30,12 +31,14 @@ SECURITY.md                     → Security policy & vulnerability reporting
 ```
 
 ### GitHub Infrastructure
+
 ```
 .github/ISSUE_TEMPLATE/         → Bug reports, feature requests, security
 .github/PULL_REQUEST_TEMPLATE/  → PR template
 ```
 
 ### Documentation Tools
+
 ```
 .editorconfig                   → Editor settings
 .gitignore                      → Git ignore rules (review first)
@@ -47,6 +50,7 @@ SECURITY.md                     → Security policy & vulnerability reporting
 ## ⚠️ ADAPT THESE (Modify Before Using)
 
 ### Documentation (Remove v4.0-specific content)
+
 ```
 FAQ.md                → FAQ_v4.1-RC.md (rewrite for v4.1-RC context)
 README.md             → Adapt overview for specification repo
@@ -54,6 +58,7 @@ IMPLEMENTATION.md     → Create IMPLEMENTATION_GUIDE_v4.1-RC.md
 ```
 
 ### Project Files (Update version references)
+
 ```
 PROJECT_STATUS.md     → Adapt for v4.1-RC milestones
 REPOSITORY-STRUCTURE-GUIDE.md → Update for spec repo structure
@@ -64,6 +69,7 @@ REPOSITORY-STRUCTURE-GUIDE.md → Update for spec repo structure
 ## 📖 REFERENCE ONLY (Don't Copy)
 
 ### Historical Context
+
 ```
 CHANGELOG.md          → Read for v4.0 context (keep YOUR changelog as primary)
 Evolution/            → Understand evolution from v4.0 perspective
@@ -71,12 +77,14 @@ history of the project/ → Project history reference
 ```
 
 ### Research & Analysis
+
 ```
 research/             → Research evidence and studies (useful reference)
 ANALYSIS-IMPLEMENTATION-OPTIONS.md → Implementation considerations
 ```
 
 ### Documentation Examples
+
 ```
 documentation/        → Structure and organization ideas
 docs/                 → Documentation site structure
@@ -87,6 +95,7 @@ docs/                 → Documentation site structure
 ## ❌ DO NOT COPY
 
 ### Code Files
+
 ```
 src/                  → Python implementation (v4.0, incompatible)
 lfas/                 → Package code (v4.0)
@@ -99,6 +108,7 @@ demo.py               → v4.0 demo
 ```
 
 ### Build & Package Files
+
 ```
 setup.py              → Python package setup
 pyproject.toml        → Python project config
@@ -108,12 +118,14 @@ requirements*.txt     → Python dependencies
 ```
 
 ### Protocol Specifications
+
 ```
 protocol/lfas-v4-specification.xml           → v4.0 XML (you have v4.1-RC JSON)
 protocol/lfas-v4-specification-enhanced.xml  → v4.0 enhanced XML
 ```
 
 ### Development Tools (Code-specific)
+
 ```
 .pre-commit-config.yaml → Pre-commit hooks for Python code
 ```
@@ -169,16 +181,19 @@ A: ⚠️ Review first. The v4.0 .gitignore is for Python projects. Adapt for yo
 ## Priority Actions
 
 ### **High Priority: Add These Now**
+
 1. `CODE_OF_CONDUCT.md` - Establish community standards
 2. `SECURITY.md` - Enable security vulnerability reporting
 3. `.github/ISSUE_TEMPLATE/` - Better issue tracking
 
 ### **Medium Priority: Consider These**
+
 1. `CONTRIBUTING.md` (adapted) - Guide contributors
 2. `FAQ.md` (rewritten for v4.1-RC) - Answer common questions
 3. `.gitignore` (reviewed) - Better git management
 
 ### **Low Priority: Optional**
+
 1. `PROJECT_STATUS.md` (adapted) - Track project status
 2. `IMPLEMENTATION.md` (rewritten) - Future implementation guide
 3. Research documents (reference) - Additional context
@@ -206,6 +221,7 @@ A: ⚠️ Review first. The v4.0 .gitignore is for Python projects. Adapt for yo
 ## Summary
 
 **Safe to Copy (9 files/folders):**
+
 - CODE_OF_CONDUCT.md
 - SECURITY.md
 - .github/ISSUE_TEMPLATE/
@@ -215,6 +231,7 @@ A: ⚠️ Review first. The v4.0 .gitignore is for Python projects. Adapt for yo
 - .gitignore (review first)
 
 **Adapt Before Using (5 files):**
+
 - CONTRIBUTING.md
 - FAQ.md
 - README.md
@@ -222,6 +239,7 @@ A: ⚠️ Review first. The v4.0 .gitignore is for Python projects. Adapt for yo
 - PROJECT_STATUS.md
 
 **Reference Only (Don't Copy) (15+ files/folders):**
+
 - CHANGELOG.md (use yours)
 - research/
 - Evolution/
@@ -229,6 +247,7 @@ A: ⚠️ Review first. The v4.0 .gitignore is for Python projects. Adapt for yo
 - docs/
 
 **Never Copy (20+ files/folders):**
+
 - src/
 - lfas/
 - lfas_protocol/
