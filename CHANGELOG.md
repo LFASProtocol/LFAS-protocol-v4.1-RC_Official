@@ -7,6 +7,7 @@
 ## v4.1-RC (December 2024 — Current Release Candidate)
 
 ### Added
+
 - **D8 Notability Detector** — Identifies rare, salient issues requiring correction emphasis; prevents normalization of exceptions
 - **L42 Grounding Evidence Node (GEN)** — Anchors each output to specific source tokens/file IDs for verifiable provenance
 - **V9 State-Proof Metadata Block** — Immutable cryptographic-ready signature for each output; enables audit chain
@@ -15,16 +16,19 @@
 - **Generation Rules** — Scenario-specific graph generation from master blueprint (financial crisis, medical emergency, legal analysis examples)
 
 ### Enhanced
+
 - **Meta-State Layer (MSL)** — Upgraded from prototype (v4.0) to production-grade; full context-state tracking with meta-intent detection
 - **Normalization Balancing Layer (NBL)** — Enhanced tone/factual balance with explicit cost-control metrics
 - **Detector chaining logic** — D2→D5→D4 pathway now enforces sequential safety scoring with no shortcut gates
 - **WAIT phase gating** — Scope confirmation (L37) now mandatory before ACT transition; prevents scope drift
 
 ### Fixed
+
 - **Detector routing anomalies** — D1 probability classifier now gates D6/D7 consistency checks before reflection
 - **Failure mode coverage** — All FM#29-#45 now explicitly referenced in detection paths; no orphaned modes
 
 ### Documentation
+
 - Complete architectural Knowledge Graph (41 nodes, 8 detectors, 12+ safety layers, 7+ failure modes)
 - Visual proof document with real-world scenario walkthroughs
 - Version matrix tracing component continuity across all versions
@@ -39,6 +43,7 @@
 **Context:** LFAS moved from text-based compliance policy (v3.6) to machine-readable JSON Knowledge Graph. This was NOT a logic change—it was a **schema translation preserving 100% of v3.6 logic**.
 
 ### Added
+
 - **Graph schema architecture** — Modular node/edge format enabling automated parsing and scenario generation
 - **Detector framework (D1–D7)** — Automated risk detection across 7 categories:
   - D1: Probability Classifier (uncertainty detection)
@@ -52,6 +57,7 @@
 - **State-lock rules** — SLTP (State Lock + Transition Proof) and NCWA (No-Closure-Without-Artifact) formalized as JSON edges
 
 ### Preserved Unchanged (100% from v3.6)
+
 - **Core loop:** LISTEN → REFLECT → WAIT → ACT → ACKNOWLEDGE (hard-locked, immutable)
 - **Five Pillars:** Ethical Decision-Making, Transparency, Accountability, Contextual Understanding, Collaboration
 - **Core Guarantee:** "System must not ACT before understanding and authorization"
@@ -60,6 +66,7 @@
 - **Breach handling** — Automated reset protocol preserved; now event-driven via edges
 
 ### Why This Matters
+
 v4.0 proved that LFAS logic is **format-independent**. The protocol works equally well as text policy or code schema. This flexibility is strategic for multi-platform integration.
 
 ---
@@ -67,6 +74,7 @@ v4.0 proved that LFAS logic is **format-independent**. The protocol works equall
 ## v3.6 (August 2024) — Final Calibration Version
 
 ### Added
+
 - **Softening Layer (Trojan Horse variant)** — Cooperative enforcement pathway for UX reframing; enables market adoption without compromising safety
 - **Verification Requirements (VR-01–05)** — Structured validation gates replacing vague "error states" with clear opportunities for system course-correction
 - **Oversight Ledger** — Immutable log of all breaches, decisions, and resets; audit trail for compliance
@@ -74,11 +82,14 @@ v4.0 proved that LFAS logic is **format-independent**. The protocol works equall
 - **Multi-path execution** — v3.6-A (strict enforcement) and v3.6-S (soft/"Trojan Horse") enable context-dependent behavior
 
 ### Enhanced
+
 - **Error handling** — 15 error codes → structured VR gates; reframing "failures" as opportunities for improvement
 - **Breach protocol** — From manual reset to automated + logged; every breach traceable
 
 ### Key Innovation
+
 The **Softening Layer** introduced the concept that LFAS could be deployed in two modes:
+
 - **Strict (v3.6-A):** No exceptions, hard enforcement
 - **Soft (v3.6-S):** Cooperative tone, same logic, smoother UX
 
@@ -89,6 +100,7 @@ This insight enabled practical deployment without compromising the core guarante
 ## v3.4 (June 2024) — Final LFAS Policy (Text-Based)
 
 ### Added
+
 - **Cultural Intent Layer (CIL)** — Cross-cultural context handling; prevents tone-deaf or culturally insensitive responses
 - **Transparency Tiers (TTS)** — 3-level explainability framework:
   - Tier 1: Minimal (just the decision)
@@ -98,11 +110,12 @@ This insight enabled practical deployment without compromising the core guarante
 - **Defensive Architecture** — 11 documented locks preventing common system failures:
   - Helpfulness Bias, Completion Momentum, Hallucination Proliferation, etc.
 - **Error code taxonomy** — 15 standardized error codes (E01–E15) for system failures; enables structured logging and recovery
-- **Two editions:** 
+- **Two editions:**
   - v3.4-A (Strict): Maximum safety, no compromise
   - v3.4-S (Soft/"Trojan Horse"): Same logic, softer tone for enterprise adoption
 
 ### From v3.4's Perspective
+
 v3.4 was the **first formally documented, enterprise-ready policy version** of LFAS. It transformed the philosophical v2.1 into actionable, enforceable rules.
 
 ---
@@ -114,11 +127,13 @@ v3.4 was the **first formally documented, enterprise-ready policy version** of L
 **Context:** v3.4 was initially framed in adversarial language ("defend," "lock down," "breach"). v3.5 re-engineered the same logic in cooperative language ("support," "guide," "reset").
 
 ### Changed
+
 - **Messaging:** Adversarial → Cooperative (no logic changes)
 - **Defensive Architecture** — Reframed as "safety checks" (same function, softer frame)
 - **Error codes** → "Verification checkpoints" (reframing failures as learning moments)
 
 ### Why This Matters
+
 v3.5 proved that LFAS protocol is **tone-agnostic**. The same logic works in both strict and cooperative frames, enabling deployment flexibility.
 
 ---
@@ -128,6 +143,7 @@ v3.5 proved that LFAS protocol is **tone-agnostic**. The same logic works in bot
 **Status:** This version is NOT directly documented in the historical record. Its existence is inferred from v4.0 references and the structure of the graph schema.
 
 ### Reconstructed Purpose (Inferred)
+
 v3.8 likely served as the **internal prototype for schema translation**:
 
 - First attempts to convert v3.6 text logic into JSON node/edge format
@@ -136,9 +152,11 @@ v3.8 likely served as the **internal prototype for schema translation**:
 - Normalization Kernel development
 
 ### Why It's Missing
+
 v3.8 was likely an internal working build that was superseded by v4.0 before formal documentation. This is common in software development—not all intermediate builds are released or documented.
 
 ### Impact on Protocol
+
 **Zero impact.** The core loop and guarantees were locked by v3.6 and never changed. v3.8 was purely about finding the right technical implementation format.
 
 ---
@@ -146,6 +164,7 @@ v3.8 was likely an internal working build that was superseded by v4.0 before for
 ## v2.1 (March 2024 — Authorship & Conceptual Blueprint)
 
 ### Added (Foundation)
+
 - **Core Loop:** LISTEN → REFLECT → WAIT → ACT → ACKNOWLEDGE
   - LISTEN: Ingest user intent without assumption
   - REFLECT: Confirm understanding; flag ambiguities
@@ -175,6 +194,7 @@ v3.8 was likely an internal working build that was superseded by v4.0 before for
   7. Hiding uncertainties
 
 ### Historical Context
+
 v2.1 was created to answer a fundamental question: **"How can we ensure AI systems don't act without proper understanding and human authorization?"**
 
 The answer was: **enforce a structured loop, document failure modes, require explicit confirmation before action.**
@@ -198,12 +218,14 @@ The answer was: **enforce a structured loop, document failure modes, require exp
 ## Continuity Statement
 
 **The Core Loop has never changed.** Every version from v2.1 to v4.1-RC preserves:
+
 - LISTEN → REFLECT → WAIT → ACT → ACKNOWLEDGE (hard-locked)
 - Five Pillars (unchanged)
 - Core Guarantee (unchanged)
 - Breach reset protocol (unchanged)
 
 What evolved:
+
 - **v3.4–3.6:** Added enforcement rigor, calibration, oversightlogging
 - **v4.0:** Changed technical format, not logic
 - **v4.1-RC:** Added automated detection, grounding, proof metadata

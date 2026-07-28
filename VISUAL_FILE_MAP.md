@@ -1,6 +1,7 @@
 # Visual File Compatibility Map
 
 ## Legend
+
 - ✅ **GREEN** = Copy directly (safe, recommended)
 - ⚠️ **YELLOW** = Adapt before use (needs modification)
 - 📖 **BLUE** = Reference only (read, don't copy)
@@ -105,6 +106,7 @@ LFAS-protocol-v4/
 ## Color-Coded Summary
 
 ### ✅ GREEN - Copy These (9 items)
+
 ```
 ✅ CODE_OF_CONDUCT.md
 ✅ SECURITY.md
@@ -115,6 +117,7 @@ LFAS-protocol-v4/
 ```
 
 ### ⚠️ YELLOW - Adapt These (7 items)
+
 ```
 ⚠️ CONTRIBUTING.md           (update for spec repo)
 ⚠️ FAQ.md                    (rewrite for v4.1-RC)
@@ -126,6 +129,7 @@ LFAS-protocol-v4/
 ```
 
 ### 📖 BLUE - Reference Only (10+ items)
+
 ```
 📖 CHANGELOG.md              (keep YOUR version)
 📖 research/                 (research studies)
@@ -139,6 +143,7 @@ LFAS-protocol-v4/
 ```
 
 ### ❌ RED - Never Copy (50+ items)
+
 ```
 ❌ src/                      (v4.0 Python code)
 ❌ lfas/                     (v4.0 package)
@@ -230,6 +235,7 @@ LFAS-protocol-v4/
 ## Priority Actions by Color
 
 ### 🟢 Priority 1: Copy GREEN Files (Immediate)
+
 1. Copy `CODE_OF_CONDUCT.md`
 2. Copy `SECURITY.md`
 3. Copy `.github/ISSUE_TEMPLATE/`
@@ -238,16 +244,19 @@ LFAS-protocol-v4/
 6. Copy `.markdownlint.json`
 
 ### 🟡 Priority 2: Adapt YELLOW Files (Soon)
+
 1. Adapt `CONTRIBUTING.md` for spec repo
 2. Rewrite `FAQ.md` as `FAQ_v4.1-RC.md`
 3. Update `README.md` for v4.1-RC
 
 ### 🔵 Priority 3: Review BLUE Files (Optional)
+
 1. Review `research/` for context
 2. Review `documentation/` for structure ideas
 3. Review `CHANGELOG.md` for v4.0 details
 
 ### 🔴 Priority 0: Never Touch RED Files
+
 1. Ignore all `.py` files
 2. Ignore `src/`, `tests/`, `tools/`
 3. Ignore `protocol/*.xml`
@@ -270,7 +279,8 @@ Total files in v4.0 repo: 77+
 
 ## Bottom Line
 
-**Most Important:** 
+**Most Important:**
+
 - ✅ Copy community infrastructure (9 files)
 - ❌ Never copy code or v4.0 specs (48+ files)
 - ⚠️ Adapt documentation carefully (7 files)

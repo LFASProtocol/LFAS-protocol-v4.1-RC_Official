@@ -13,7 +13,8 @@
 ## Core Artifacts
 
 ### 1. **`/specs/v4.1-RC/blueprint.json`**
-- **The authoritative Master Knowledge Graph blueprint** (41 nodes, 8 detectors, all safety layers)
+
+- **The authoritative Master Knowledge Graph blueprint** (valid JSON, validated in CI against `/specs/v4.1-RC/blueprint.schema.json`)
 - Contains: Phases (LISTEN→REFLECT→WAIT→ACT→ACKNOWLEDGE), Layers (L1-L41), Detectors (D1-D8), Failure Modes (FM#29-#45), Gates, Rules
 - Version-locked: `4.1-RC`
 - Status: Engine-ready, audit-validated
@@ -21,36 +22,43 @@
 - **Warning:** Do not use outside LFAS context without full protocol documentation
 
 ### 2. **`/specs/v4.1-RC/generation_rules.md`**
+
 - Official instructions for building scenario-specific enforcement graphs from the master blueprint
 - Includes: Rule taxonomy, scenario templates (financial crisis, medical emergency, legal analysis), edge case handling
 - Cross-references `blueprint.json` nodes and detectors
 
-### 3. **`/LFAS_v4.1-RC_Visual_Summary.md`**
+### 3. **`/Visual_Summary.md`**
+
 - Human-readable proof: Protocol overview, Mermaid diagram, component tables, real-world examples
 - Press-ready and stakeholder-accessible
 - Purpose: Non-technical communication layer
 
 ### 4. **`/CHANGELOG.md`**
+
 - Complete version history v2.1 → v4.1-RC
 - Documents what changed, why, and how components evolved
 - Traces continuity of core loop and five pillars across all versions
 
 ### 5. **`/VERSION_MATRIX.md`**
+
 - Component continuity heatmap showing which features existed in each version
 - Identifies v3.8 as reconstructed (internal bridge build)
 - Confirms 100% preservation of core loop and guarantees
 
 ### 6. **`/IMPLEMENTATION_CHECKLIST.md`**
+
 - Validation gates for v4.1 Stable promotion
 - 4-phase checklist: Specification Integrity → Functional Testing → Cross-Reference Validation → External Review
 - Sign-off matrix for formal approval
 
 ### 7. **`/ROADMAP.md`**
+
 - v4.1-RC status (complete)
 - v4.1 Stable next steps (verification, builder tool, test suite)
 - Future versions and implementation timeline
 
 ### 8. **`/interaction-autopsy/`**
+
 - **NEW MODULE:** LFAS Interaction Autopsy & Knowledge Graph Constructor
 - Forensic analysis system for user-AI conversation transcripts
 - Detects failure patterns, maps interaction causality, provides counterfactual LFAS-compliant paths
@@ -72,8 +80,8 @@
 1. Use `blueprint.json` as the authoritative graph for any LFAS-compliant system
 2. Apply `generation_rules.md` to create scenario-specific enforcement graphs
 3. Reference `Visual_Summary.md` for stakeholder communication
-4. Use `CHANGELOG` and `VERSION_MATRIX` to understand protocol evolution
-5. Follow `v4.1 Stable — Implementation Validation Checklist` for v4.1 Stable validation
+4. Use `CHANGELOG.md` and `VERSION_MATRIX.md` to understand protocol evolution
+5. Follow `IMPLEMENTATION_CHECKLIST.md` for v4.1 Stable validation
 6. **NEW:** Use `interaction-autopsy/` module to analyze user-AI conversations for failure patterns and LFAS compliance validation
 
 ---
@@ -81,15 +89,20 @@
 ## Repository Structure
 
 LFAS-protocol-v4.1-RC_Official/
-├── MANIFEST (this file)
-├── CHANGELOG (version history)
-├── VERSION_MATRIX (component continuity)
-├── v4.1 Stable — Implementation Validation Checklist
+├── MANIFEST.md (this file)
+├── CHANGELOG.md (version history)
+├── VERSION_MATRIX.md (component continuity)
+├── IMPLEMENTATION_CHECKLIST.md (validation gates)
 ├── Visual_Summary.md (human-readable proof)
-├── Roaadmap (next steps)
+├── ROADMAP.md (next steps)
+├── CONTRIBUTING.md (filename policy, blueprint rules, local checks)
+├── tools/ (validation scripts run locally and in CI)
 ├── specs/
 │   └── v4.1-RC/
-│       ├── blueprint.json (MASTER: 41 nodes, 8 detectors)
+│       ├── README.md (which file is canonical)
+│       ├── blueprint.json (MASTER: machine-readable graph)
+│       ├── blueprint.schema.json (schema for blueprint.json)
+│       ├── kg_generation_guide.md (how to instantiate scenario graphs)
 │       └── generation_rules.md (scenario graph generation rules)
 └── interaction-autopsy/
     ├── README.md (module overview)
@@ -104,12 +117,17 @@ LFAS-protocol-v4.1-RC_Official/
     └── docs/
         └── USAGE_GUIDE.md
 
+---
+
+## Validation
+
+Every pull request runs `.github/workflows/validate-spec.yml`: blueprint schema and referential validation, filename policy, cross-reference check and Markdown lint. To reproduce locally see `CONTRIBUTING.md`.
 
 ---
 
 ## Next Phase: v4.1 Stable
 
-- [ ] Graph integrity verification (node/edge validation)
+- [x] Graph integrity verification (node/edge validation) — `tools/validate_blueprint.py`
 - [ ] Automated KG Builder tool (CLI or web)
 - [ ] Comprehensive test suite for generated scenario graphs
 - [ ] Formal specification lock

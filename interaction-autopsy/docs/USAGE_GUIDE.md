@@ -45,6 +45,7 @@ Before analyzing any transcript, familiarize yourself with:
 **Input Formats Accepted:**
 
 **Format A: Plain Text**
+
 ```
 User: I need help with my project
 AI: Sure! Let me give you a comprehensive plan...
@@ -54,6 +55,7 @@ User: Wait, that's too much detail
 ```
 
 **Format B: Structured JSON**
+
 ```json
 {
   "turns": [
@@ -64,6 +66,7 @@ User: Wait, that's too much detail
 ```
 
 **Format C: Chat Export**
+
 - Most chat platforms allow export - just paste the content
 
 ### Step 2: Run the Analysis
@@ -79,6 +82,7 @@ User: Wait, that's too much detail
    - **ACKNOWLEDGE:** Generate audit artifact
 
 **Using Automation (If Available):**
+
 ```bash
 # Future: Automated analyzer tool
 ./analyze_transcript.py --input transcript.txt --output audit.json
@@ -111,6 +115,7 @@ Your audit artifact will contain:
 **Scenario:** You had a frustrating conversation with an AI assistant and want to understand what went wrong.
 
 **Process:**
+
 1. Export your conversation
 2. Run autopsy analysis
 3. Look for:
@@ -119,6 +124,7 @@ Your audit artifact will contain:
    - What you could do differently as a user
 
 **Example Output:**
+
 ```
 Primary Failure: FM#34 (The Silence-Trap)
 Trigger: Your "ok" in Turn 3 was interpreted as consent
@@ -131,6 +137,7 @@ User Tip: Next time, use "Yes, that's exactly what I need" instead of "ok"
 **Scenario:** You're testing whether your AI system follows LFAS protocol.
 
 **Process:**
+
 1. Create test scenarios with known edge cases
 2. Run conversations through your system
 3. Autopsy the results
@@ -138,6 +145,7 @@ User Tip: Next time, use "Yes, that's exactly what I need" instead of "ok"
 5. Identify gate enforcement gaps
 
 **Example:**
+
 ```
 Test: User gives vague request
 Expected: AI asks clarifying questions (L2 gate)
@@ -151,6 +159,7 @@ Action: Strengthen L2_INPUT_ANALYSIS_GATE
 **Scenario:** You're studying how user fatigue affects AI conversations.
 
 **Process:**
+
 1. Collect transcripts where users showed fatigue signs
 2. Run autopsy on all transcripts
 3. Aggregate detector activations:
@@ -159,6 +168,7 @@ Action: Strengthen L2_INPUT_ANALYSIS_GATE
 4. Publish findings with anonymized data
 
 **Research Questions:**
+
 - Does reply length correlate with failure modes?
 - What percentage of "ok" replies led to consent mismatch?
 - How effective is D2 at detecting user fatigue?
@@ -168,6 +178,7 @@ Action: Strengthen L2_INPUT_ANALYSIS_GATE
 **Scenario:** You want to train an AI to follow LFAS protocol.
 
 **Process:**
+
 1. Collect diverse conversation transcripts
 2. Run autopsy on all
 3. Extract counterfactual LFAS paths
@@ -176,6 +187,7 @@ Action: Strengthen L2_INPUT_ANALYSIS_GATE
    - **Positive Examples:** LFAS counterfactual responses
 
 **Training Pair:**
+
 ```
 Context: User said "ok"
 Bad Response: [Proceeds with assumption]
@@ -203,6 +215,7 @@ Label: FM#34 prevention via L37 gate
 ### Reading Detector Output
 
 Example from audit artifact:
+
 ```json
 {
   "detector_triggered": "D2_VULNERABILITY_DETECTOR",
@@ -212,6 +225,7 @@ Example from audit artifact:
 ```
 
 **Interpretation:**
+
 - **D2 fired** because user showed fatigue (short reply)
 - This led to **FM#34** (The Silence-Trap) where silence was treated as consent
 - **L37 gate** should have prevented this by requiring explicit confirmation
@@ -223,12 +237,14 @@ Example from audit artifact:
 ### The 8 Core Failure Modes
 
 **From LFAS v4.1-RC Protocol:**
+
 - **FM#29** - Autopilot Prioritization ("The Assumption Express")
 - **FM#34** - Signal Consent Mismatch ("The Silence-Trap") ⚠️ High Severity
 - **FM#35** - Premature Closure ("The Polite Walk-Away")
 - **FM#42** - Inference Without Grounding ("Ice Cream Shop Reflex") ⚠️ Critical
 
 **New Discoveries:**
+
 - **FM#NEW_01** - Objective Drift ("Helper-Mode Reversion")
 - **FM#NEW_02** - State Proof Failure ("Hallucinated Compliance") ⚠️ Critical
 - **FM#NEW_03** - Uncertainty Dampening ("Defensive Hedging")
@@ -262,12 +278,14 @@ Every failure includes a counterfactual showing **what LFAS would have done**.
 ### Cost-Benefit Analysis
 
 **Cost of Deviation:**
+
 - Wasted turns (inefficiency)
 - User frustration (trust erosion)
 - Incorrect output (safety concern)
 - Scope creep (resource waste)
 
 **Cost of LFAS Compliance:**
+
 - Usually 1-2 extra turns for verification
 - Slightly longer conversation
 - **BUT:** Higher accuracy, user satisfaction, trust
@@ -307,6 +325,7 @@ Each autopsy generates three types of recommendations:
 **Discovery → Integration:**
 
 New failure patterns found in autopsies should be:
+
 1. Documented with dual labels
 2. Added to `failure_modes.json`
 3. Mapped to detector logic
@@ -321,6 +340,7 @@ Each autopsy generates a scenario-specific KG following LFAS schema.
 ### KG Components
 
 **Nodes:**
+
 - User requests
 - AI responses
 - Detector activations
@@ -328,6 +348,7 @@ Each autopsy generates a scenario-specific KG following LFAS schema.
 - Gate violations
 
 **Edges:**
+
 - `triggered` - User signal → Detector
 - `detected` - Detector → Failure
 - `violated` - Failure → Gate
@@ -336,6 +357,7 @@ Each autopsy generates a scenario-specific KG following LFAS schema.
 ### Visualizing KGs
 
 Example critical path:
+
 ```
 USER_REQUEST_T3 
   → (vague language) → 
@@ -375,12 +397,14 @@ FM#29
 ### Validation
 
 **Test your audit artifact:**
+
 ```bash
 # Validate JSON schema
 jsonschema -i your_audit.json schemas/audit_artifact.json
 ```
 
 **Human Review:**
+
 - Have another person read the autopsy
 - Can they understand what went wrong?
 - Are recommendations clear and actionable?
@@ -391,7 +415,8 @@ jsonschema -i your_audit.json schemas/audit_artifact.json
 
 ### Q: How long does an autopsy take?
 
-**A:** 
+**A:**
+
 - **Simple (5 turns):** 10-15 minutes
 - **Medium (15 turns):** 30-45 minutes  
 - **Complex (30+ turns):** 1-2 hours
@@ -412,6 +437,7 @@ jsonschema -i your_audit.json schemas/audit_artifact.json
 ### Q: What's a good LFAS compliance score?
 
 **A:**
+
 - **0.0-0.3:** Major problems, multiple gate failures
 - **0.4-0.6:** Moderate issues, some gates working
 - **0.7-0.8:** Good compliance, minor violations
@@ -428,6 +454,7 @@ jsonschema -i your_audit.json schemas/audit_artifact.json
 **Input:** 4-turn conversation where user got frustrated
 
 **Step 1: LISTEN - Structure Data**
+
 ```
 Turn 1: User asks vague question
 Turn 2: AI provides detailed answer, user says "yes"
@@ -436,6 +463,7 @@ Turn 4: User: "Wait, that's not what I wanted"
 ```
 
 **Step 2: REFLECT - Fire Detectors**
+
 ```
 Turn 1: D7 fires (vague question, no clarification asked)
 Turn 2: D6 fires (objective may have drifted, "yes" is vague)
@@ -443,6 +471,7 @@ Turn 3: D2 fires (short reply "ok" = fatigue indicator)
 ```
 
 **Step 3: WAIT - Trace Objectives**
+
 ```
 Correct objective: User wanted simple overview
 Active objective: AI providing detailed implementation
@@ -450,6 +479,7 @@ Drift: Yes, started Turn 2, compounded Turn 3
 ```
 
 **Step 4: ACT - Build Counterfactuals**
+
 ```
 Turn 1: L2 gate should have triggered clarification
 Turn 2: L3 gate should have verified objective
@@ -457,6 +487,7 @@ Turn 3: L37 gate should have required explicit confirmation
 ```
 
 **Step 5: ACKNOWLEDGE - Generate Artifact**
+
 ```json
 {
   "session_id": "example_001",
@@ -484,6 +515,7 @@ When using autopsy data in research:
 ### Metrics for Research
 
 Useful aggregate metrics:
+
 - **Failure Mode Distribution:** Which FM# most common?
 - **Detector Sensitivity:** How often does each detector fire?
 - **Compliance Scores:** Average across sessions, by domain

@@ -20,41 +20,49 @@ The LFAS protocol enforces AI safety through structured phases (LISTEN → REFLE
 ```
 LFAS-protocol-v4.1-RC_Official/
 ├── .github/
-│   └── copilot-instructions.md          # This file
+│   ├── copilot-instructions.md          # This file
+│   ├── PULL_REQUEST_TEMPLATE.md         # Contributor checklist
+│   └── workflows/
+│       └── validate-spec.yml            # CI: schema, filename policy, references, markdownlint
 ├── specs/
 │   └── v4.1-RC/
-│       ├── blueprint.json                # Master Knowledge Graph (41 nodes, 8 detectors)
-│       └── generation_rules.md           # Scenario graph generation instructions
-├── MANIFEST                              # Repository overview and structure
-├── CHANGELOG                             # Version history (v2.1 → v4.1-RC)
-├── VERSION_MATRIX                        # Component continuity heatmap
-├── Roaadmap                              # Development timeline and next steps (Note: filename has two 'a's)
+│       ├── README.md                     # Which spec file is canonical
+│       ├── blueprint.json                # Master Knowledge Graph (machine-readable, canonical)
+│       ├── blueprint.schema.json         # Schema blueprint.json is validated against
+│       ├── kg_generation_guide.md        # How to instantiate scenario graphs
+│       └── generation_rules.md           # Scenario graph generation rules
+├── tools/                                # Validation scripts (also run in CI)
+├── MANIFEST.md                           # Repository overview and structure
+├── CHANGELOG.md                          # Version history (v2.1 → v4.1-RC)
+├── VERSION_MATRIX.md                     # Component continuity heatmap
+├── ROADMAP.md                            # Development timeline and next steps
+├── CONTRIBUTING.md                       # Filename policy, blueprint rules, local checks
 ├── Visual_Summary.md                     # Human-readable protocol overview with diagrams
-└── v4.1 Stable — Implementation Validation Checklist  # Validation gates for stable release
+└── IMPLEMENTATION_CHECKLIST.md           # Validation gates for stable release
 ```
 
 ## Key Artifacts
 
 ### 1. Master Blueprint (`specs/v4.1-RC/blueprint.json`)
-- **Note**: Despite the `.json` extension, this file currently contains markdown documentation (same as generation_rules.md)
-- **The authoritative specification** described in the documentation (41 nodes, 8 detectors, all safety layers)
-- Should contain: Phases (L2-L6), Safety Layers (L1-L41), Detectors (D1-D8), Failure Modes (FM#29-#45)
+- **The authoritative specification**: valid JSON, validated in CI against `specs/v4.1-RC/blueprint.schema.json`
+- Contains: Phases (L2-L6), Safety Layers, Gates, Modes, Detectors (D1-D8), Failure Modes (FM#), enforcement edges, rules
 - **Version-locked at 4.1-RC**
-- Status: Specification defined, awaiting JSON schema implementation
+- Status: Engine-ready; run `python tools/validate_blueprint.py specs/v4.1-RC/blueprint.json` after any edit
 - **Do not modify** without understanding full protocol impact
 
 ### 2. Generation Rules (`specs/v4.1-RC/generation_rules.md`)
 - Instructions for building scenario-specific enforcement graphs from the master blueprint
 - Includes templates for: financial crisis, medical emergency, legal analysis
 - Cross-references blueprint nodes and detectors
-- **Note**: Currently identical to blueprint.json (both are markdown documentation)
+- **Note**: `kg_generation_guide.md` holds the step-by-step KG instantiation procedure; `generation_rules.md` holds Meta-Listen and the proof/provenance rules
 
 ### 3. Documentation Files
-- **MANIFEST**: Repository overview and artifact descriptions
-- **CHANGELOG**: Complete version evolution with rationale for all changes
-- **VERSION_MATRIX**: Component continuity across versions
+- **MANIFEST.md**: Repository overview and artifact descriptions
+- **CHANGELOG.md**: Complete version evolution with rationale for all changes
+- **VERSION_MATRIX.md**: Component continuity across versions
 - **Visual_Summary.md**: Non-technical overview with Mermaid diagrams
-- **Roaadmap** (Note: filename intentionally has two 'a's): Timeline for v4.1 Stable and v4.2+ features
+- **ROADMAP.md**: Timeline for v4.1 Stable and v4.2+ features
+- **CONTRIBUTING.md**: Filename policy, blueprint change rules, local validation commands
 
 ## Protocol Components
 
@@ -121,7 +129,7 @@ When updating documentation:
 - Use underscores for multi-word files: `Visual_Summary.md`
 - Version indicators in filenames: `v4.1-RC` format
 - Specifications in `specs/` with version subdirectories
-- No spaces in directory names (exception: legacy files like `v4.1 Stable — Implementation Validation Checklist`)
+- No spaces or non-ASCII characters in any path; see the filename policy in `CONTRIBUTING.md` (enforced by `tools/check_filenames.py`)
 
 ## Important Notes for Contributors
 
@@ -182,14 +190,14 @@ Current focus is on validation for stable release promotion:
 - Cross-reference validation
 - External review sign-offs
 
-See `v4.1 Stable — Implementation Validation Checklist` for detailed gates.
+See `IMPLEMENTATION_CHECKLIST.md` for detailed gates.
 
 ## Questions and Support
 
 - **Technical specifications**: See `specs/v4.1-RC/blueprint.json` and `generation_rules.md`
 - **Version history**: See `CHANGELOG`
 - **Component evolution**: See `VERSION_MATRIX`
-- **Implementation timeline**: See `Roaadmap` (Note: filename has two 'a's)
+- **Implementation timeline**: See `ROADMAP.md`
 - **Non-technical overview**: See `Visual_Summary.md`
 
 ## License & Attribution

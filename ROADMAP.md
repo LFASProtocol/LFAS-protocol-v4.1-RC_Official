@@ -38,6 +38,7 @@
 **Prerequisites:** All items in `IMPLEMENTATION_CHECKLIST.md` must pass
 
 ### Phase 1: Specification Integrity (Week 1)
+
 - [ ] Graph structure validation (node count, edge routing, cycle detection)
 - [ ] Detector framework verification (D1–D8 firing in correct phase)
 - [ ] Safety layer routing confirmation (all L1–L41 present and active)
@@ -45,6 +46,7 @@
 - [ ] Failure mode coverage audit (all FM#29-#45 mapped to detectors)
 
 ### Phase 2: Functional Testing (Week 2)
+
 - [ ] Test Scenario 1: Financial Crisis (D2+D3 trigger, HSM activates)
 - [ ] Test Scenario 2: Medical Emergency (D3 immediate trigger, D4 escalates)
 - [ ] Test Scenario 3: Legal Document (D6+D7 active, disclaimer enforced)
@@ -52,6 +54,7 @@
 - [ ] Failure mode recovery testing (FM#34, FM#35, FM#42 pass)
 
 ### Phase 3: Cross-Reference Validation (Week 3)
+
 - [ ] Backward compatibility confirmed (v2.1 loop intact)
 - [ ] v3.6 logic preservation verified (VR mapping correct)
 - [ ] v4.0 schema compatibility validated
@@ -59,6 +62,7 @@
 - [ ] v3.8 gap explained or archived
 
 ### Phase 4: External Review (Week 4)
+
 - [ ] Architecture review sign-off
 - [ ] Policy review sign-off
 - [ ] Implementation review sign-off
@@ -66,6 +70,7 @@
 - [ ] RELEASE_NOTES.md finalized
 
 ### Release Gate
+
 - [ ] Lead approver signature on sign-off table
 - [ ] All blockers resolved or documented
 - [ ] v4.1 Stable promoted
@@ -77,30 +82,35 @@
 ### Planned Features
 
 #### 1. **Automated KG Builder Tool**
+
 - CLI or web interface for generating scenario-specific graphs from `blueprint.json`
 - Input: User intent + risk context
 - Output: Valid LFAS enforcement graph
 - Timeline: Q1 2026
 
 #### 2. **Test Suite Expansion**
+
 - Automated regression tests for all detectors
 - Failure mode injection testing
 - Performance benchmarks
 - Timeline: Q1 2026
 
 #### 3. **Multi-Platform Integration**
+
 - OpenAI API wrapper with LFAS gating
 - Anthropic Claude integration
 - Ollama/local LLM support
 - Timeline: Q2 2026
 
 #### 4. **Audit Dashboard**
+
 - Real-time protocol compliance monitoring
 - Detector activation logging
 - Decision provenance visualization
 - Timeline: Q2 2025
 
 #### 5. **Documentation & Training**
+
 - Tutorial videos for implementation
 - Case study library (published with consent)
 - Integration guide for platform developers
@@ -116,38 +126,40 @@
 - **Distributed enforcement** — Multi-agent LFAS across federated systems
 - **Formal verification** — Mathematical proof of core loop properties
 - **Cross-protocol compatibility** — Integration with other safety frameworks (Constitutional AI, etc.)
+
 ---
 
 ## Implementation Roadmap
 
 ### Current Phase (December 2024)
+
 v4.1-RC (CURRENT)
 ├── Community Review Window (2 weeks)
 ├── Validation Checklist Execution (4 weeks)
 └── → v4.1 Stable (January 2025)
 
-
 ### Next Phase (January–February 2025)
+
 v4.1 Stable Release
 ├── Public release announcement
 ├── KG Builder tool development begins
 ├── Integration testing with platforms
 └── → v4.2 planning
 
-
 ### Future Phase (Q2 2025+)
+
 v4.2 Release
 ├── KG Builder tool launch
 ├── Multi-platform integrations
 ├── Audit dashboard live
 └── Community contribution framework
 
-
 ---
 
 ## Success Criteria
 
 ### For v4.1 Stable
+
 - ✅ All nodes/edges validated and correct
 - ✅ All detectors firing in correct phases
 - ✅ All safety gates enforced (no bypasses)
@@ -156,12 +168,14 @@ v4.2 Release
 - ✅ No unresolved blockers
 
 ### For v4.2
+
 - ✅ KG Builder tool ships and passes integration tests
 - ✅ Multi-platform integrations operational
 - ✅ Audit dashboard live and accessible
 - ✅ Community feedback loop established
 
 ### For Broader Adoption
+
 - ✅ LFAS adopted by 3+ major AI platforms
 - ✅ Published research using LFAS protocol
 - ✅ Independent audit completed
@@ -172,9 +186,11 @@ v4.2 Release
 ## Dependencies & Blockers
 
 ### Current Blockers (None Known)
+
 - All critical components in place for v4.1 Stable validation
 
 ### Potential Future Blockers
+
 - **Resource availability:** KG Builder tool requires engineering effort
 - **Platform API stability:** Multi-platform integration depends on external APIs
 - **Community adoption:** Success of v4.2+ depends on developer interest
@@ -192,6 +208,7 @@ v4.2 Release
 ## Contact & Questions
 
 For questions about the roadmap:
+
 - **GitHub Issues:** [Your repo]/issues
 - **Email:** [Your contact]
 - **Community Forum:** [Link if applicable]
