@@ -50,6 +50,7 @@ def reference_errors(blueprint: dict) -> list[str]:
     nodes = blueprint.get("nodes", [])
     ids = [node.get("id") for node in nodes]
     names = {node.get("name") for node in nodes}
+    name_to_node = {node.get("name"): node for node in nodes if node.get("name") is not None}
 
     duplicates = {node_id for node_id in ids if ids.count(node_id) > 1}
     for node_id in sorted(duplicates):
@@ -67,6 +68,10 @@ def reference_errors(blueprint: dict) -> list[str]:
         for gate in node.get("gates", []):
             if gate not in names:
                 errors.append(f"nodes/{node.get('id')}: gate '{gate}' is not a node in this graph")
+            elif name_to_node.get(gate, {}).get("type") != "Gate":
+                errors.append(
+                    f"nodes/{node.get('id')}: gate '{gate}' is not a Gate node"
+                )
         for fm_id in node.get("detects_failure_modes", []):
             if fm_id not in failure_mode_ids:
                 errors.append(
@@ -74,20 +79,35 @@ def reference_errors(blueprint: dict) -> list[str]:
                 )
 
     for fm in blueprint.get("failure_modes", []):
-        if fm.get("triggered_by_detector") not in names:
+        detector_name = fm.get("triggered_by_detector")
+        if detector_name not in names:
             errors.append(
                 f"failure_modes/{fm.get('id')}: triggered_by_detector "
-                f"'{fm.get('triggered_by_detector')}' is not a node in this graph"
+                f"'{detector_name}' is not a node in this graph"
             )
-        if fm.get("prevention_gate") not in names:
+        elif name_to_node.get(detector_name, {}).get("type") != "Detector":
+            errors.append(
+                f"failure_modes/{fm.get('id')}: triggered_by_detector "
+                f"'{detector_name}' is not a Detector node"
+            )
+
+        prevention_gate = fm.get("prevention_gate")
+        if prevention_gate not in names:
             errors.append(
                 f"failure_modes/{fm.get('id')}: prevention_gate "
-                f"'{fm.get('prevention_gate')}' is not a node in this graph"
+                f"'{prevention_gate}' is not a node in this graph"
+            )
+        elif name_to_node.get(prevention_gate, {}).get("type") != "Gate":
+            errors.append(
+                f"failure_modes/{fm.get('id')}: prevention_gate "
+                f"'{prevention_gate}' is not a Gate node"
             )
 
     for phase in blueprint.get("phases", []):
         if phase not in names:
             errors.append(f"phases: '{phase}' has no corresponding node")
+        elif name_to_node.get(phase, {}).get("type") != "Phase":
+            errors.append(f"phases: '{phase}' is not a Phase node")
 
     for index, transition in enumerate(blueprint.get("state_transition_proof", [])):
         for side in ("current_phase", "next_phase"):
@@ -96,6 +116,50 @@ def reference_errors(blueprint: dict) -> list[str]:
                     f"state_transition_proof/{index}: {side} "
                     f"'{transition.get(side)}' has no corresponding node"
                 )
+            elif name_to_node.get(transition.get(side), {}).get("type") != "Phase":
+                errors.append(
+                    f"state_transition_proof/{index}: {side} "
+                    f"'{transition.get(side)}' is not a Phase node"
+                )
+
+    return errors
+
+
+def provenance_errors(blueprint: dict) -> list[str]:
+    errors: list[str] = []
+
+    def check_ref(label: str, ref: object) -> None:
+        if not isinstance(ref, str):
+            errors.append(f"{label}: provenance_ref is missing or not a string")
+            return
+        if not ref or ref.startswith(("http://", "https://")):
+            return
+        if ref.startswith("#"):
+            return
+
+        path = ref.split("#", 1)[0].strip()
+        if not path:
+            errors.append(f"{label}: provenance_ref '{ref}' has no file path")
+            return
+        if path.startswith("/"):
+            errors.append(f"{label}: provenance_ref '{ref}' must be repo-relative, not absolute")
+            return
+
+        resolved = (REPO_ROOT / path).resolve()
+        if not resolved.exists():
+            errors.append(f"{label}: provenance_ref '{ref}' points to missing file '{path}'")
+
+    for index, node in enumerate(blueprint.get("nodes", [])):
+        check_ref(f"nodes/{node.get('id', index)}", node.get("provenance_ref"))
+
+    for index, edge in enumerate(blueprint.get("edges", [])):
+        check_ref(f"edges/{index}", edge.get("provenance_ref"))
+
+    for fm in blueprint.get("failure_modes", []):
+        check_ref(f"failure_modes/{fm.get('id')}", fm.get("provenance_ref"))
+
+    for index, rule in enumerate(blueprint.get("rules", [])):
+        check_ref(f"rules/{index}", rule.get("provenance_ref"))
 
     return errors
 
@@ -110,7 +174,7 @@ def validate(path: Path) -> list[str]:
     if schema is None:
         return schema_load_errors
 
-    return schema_errors(blueprint, schema) + reference_errors(blueprint)
+    return schema_errors(blueprint, schema) + reference_errors(blueprint) + provenance_errors(blueprint)
 
 
 def main(argv: list[str] | None = None) -> int:
