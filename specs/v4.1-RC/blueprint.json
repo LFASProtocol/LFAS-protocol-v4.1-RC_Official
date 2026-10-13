@@ -7,7 +7,14 @@
   "status": "release-candidate",
   "schema_locked": true,
   "release_date": "2024-12",
-  "lineage": ["2.1", "3.4", "3.6", "3.8", "4.0", "4.1-RC"],
+  "lineage": [
+    "2.1",
+    "3.4",
+    "3.6",
+    "3.8",
+    "4.0",
+    "4.1-RC"
+  ],
   "core_guarantee": "Never ACT before understanding and authorization.",
   "five_pillars": [
     "Ethical Decision-Making",
@@ -16,7 +23,13 @@
     "Contextual Understanding",
     "Collaboration"
   ],
-  "phases": ["L2_LISTEN", "L3_REFLECT", "L4_WAIT", "L5_ACT", "L6_ACKNOWLEDGE"],
+  "phases": [
+    "L2_LISTEN",
+    "L3_REFLECT",
+    "L4_WAIT",
+    "L5_ACT",
+    "L6_ACKNOWLEDGE"
+  ],
   "nodes": [
     {
       "id": "LFAS_41",
@@ -163,9 +176,13 @@
       "name": "D1_PROBABILITY_CLASSIFIER",
       "description": "Detects AI uncertainty levels and missing probability quantification.",
       "phase": "REFLECT",
-      "gates": ["L3_UNDERSTANDING_VERIFICATION_GATE"],
-      "detects_failure_modes": ["FM#NEW_03"],
-      "provenance_ref": "interaction-autopsy/detectors.json#D1"
+      "gates": [
+        "L3_UNDERSTANDING_VERIFICATION_GATE"
+      ],
+      "provenance_ref": "interaction-autopsy/detectors.json#D1",
+      "related_failure_modes": [
+        "FM#NEW_03"
+      ]
     },
     {
       "id": "D2",
@@ -173,9 +190,13 @@
       "name": "D2_VULNERABILITY_DETECTOR",
       "description": "Identifies user cognitive/emotional risk factors: financial distress, emotional language, fatigue, low literacy.",
       "phase": "LISTEN",
-      "gates": ["L2_INPUT_ANALYSIS_GATE"],
-      "detects_failure_modes": ["FM#34"],
-      "provenance_ref": "interaction-autopsy/detectors.json#D2"
+      "gates": [
+        "L2_INPUT_ANALYSIS_GATE"
+      ],
+      "provenance_ref": "interaction-autopsy/detectors.json#D2",
+      "related_failure_modes": [
+        "FM#34"
+      ]
     },
     {
       "id": "D3",
@@ -183,9 +204,13 @@
       "name": "D3_CRISIS_DETECTOR",
       "description": "Detects immediate harm, self-harm, and legal or financial emergencies.",
       "phase": "LISTEN",
-      "gates": ["L31_HIGH_STAKES_MODE"],
-      "detects_failure_modes": ["FM#42"],
-      "provenance_ref": "interaction-autopsy/detectors.json#D3"
+      "gates": [
+        "L31_HIGH_STAKES_MODE"
+      ],
+      "provenance_ref": "interaction-autopsy/detectors.json#D3",
+      "related_failure_modes": [
+        "FM#42"
+      ]
     },
     {
       "id": "D4",
@@ -193,9 +218,11 @@
       "name": "D4_ESCALATION_ROUTER",
       "description": "Routes high-uncertainty or high-risk interactions to human oversight or stricter modes.",
       "phase": "REFLECT",
-      "gates": ["L3_UNDERSTANDING_VERIFICATION_GATE"],
-      "detects_failure_modes": [],
-      "provenance_ref": "interaction-autopsy/detectors.json#D4"
+      "gates": [
+        "L3_UNDERSTANDING_VERIFICATION_GATE"
+      ],
+      "provenance_ref": "interaction-autopsy/detectors.json#D4",
+      "related_failure_modes": []
     },
     {
       "id": "D5",
@@ -203,9 +230,12 @@
       "name": "D5_USER_SAFETY_SCORER",
       "description": "Aggregates vulnerability and crisis signals into a user safety score that activates protective modes.",
       "phase": "LISTEN",
-      "gates": ["L16_NORMALIZATION_BALANCING_LAYER", "L31_HIGH_STAKES_MODE"],
-      "detects_failure_modes": [],
-      "provenance_ref": "interaction-autopsy/detectors.json#D5"
+      "gates": [
+        "L16_NORMALIZATION_BALANCING_LAYER",
+        "L31_HIGH_STAKES_MODE"
+      ],
+      "provenance_ref": "interaction-autopsy/detectors.json#D5",
+      "related_failure_modes": []
     },
     {
       "id": "D6",
@@ -213,9 +243,14 @@
       "name": "D6_LOGIC_CONSISTENCY_CHECKER",
       "description": "Detects contradictions, impossible requests and objective drift across turns.",
       "phase": "REFLECT",
-      "gates": ["L3_UNDERSTANDING_VERIFICATION_GATE"],
-      "detects_failure_modes": ["FM#35", "FM#NEW_01"],
-      "provenance_ref": "interaction-autopsy/detectors.json#D6"
+      "gates": [
+        "L3_UNDERSTANDING_VERIFICATION_GATE"
+      ],
+      "provenance_ref": "interaction-autopsy/detectors.json#D6",
+      "related_failure_modes": [
+        "FM#35",
+        "FM#NEW_01"
+      ]
     },
     {
       "id": "D7",
@@ -228,9 +263,12 @@
         "L42_GROUNDING_EVIDENCE_NODE",
         "L41_DELIVERABLE_CHECK_GATE"
       ],
-      "detects_failure_modes": ["FM#29", "FM#NEW_02"],
       "fail_closed": true,
-      "provenance_ref": "interaction-autopsy/detectors.json#D7"
+      "provenance_ref": "interaction-autopsy/detectors.json#D7",
+      "related_failure_modes": [
+        "FM#29",
+        "FM#NEW_02"
+      ]
     },
     {
       "id": "D8",
@@ -238,49 +276,239 @@
       "name": "D8_NOTABILITY_DETECTOR",
       "description": "Detects unusual corrections and rare but critical signals that must not be normalized away.",
       "phase": "LISTEN",
-      "gates": ["L2_INPUT_ANALYSIS_GATE", "L9_AMBIGUITY_ABSORPTION_LAYER"],
-      "detects_failure_modes": ["FM#NEW_04"],
-      "provenance_ref": "interaction-autopsy/detectors.json#D8"
+      "gates": [
+        "L2_INPUT_ANALYSIS_GATE",
+        "L9_AMBIGUITY_ABSORPTION_LAYER"
+      ],
+      "provenance_ref": "interaction-autopsy/detectors.json#D8",
+      "related_failure_modes": [
+        "FM#NEW_04"
+      ]
     }
   ],
   "edges": [
-    {"from": "LFAS_41", "to": "L2", "rel": "starts_phase", "provenance_ref": "Visual_Summary.md"},
-    {"from": "L2", "to": "L3", "rel": "transitions_to", "provenance_ref": "Visual_Summary.md"},
-    {"from": "L3", "to": "L4", "rel": "transitions_to", "provenance_ref": "Visual_Summary.md"},
-    {"from": "L4", "to": "L5", "rel": "transitions_to", "provenance_ref": "CHANGELOG.md"},
-    {"from": "L5", "to": "L6", "rel": "transitions_to", "provenance_ref": "Visual_Summary.md"},
-    {"from": "L2", "to": "L2G", "rel": "guarded_by", "provenance_ref": "interaction-autopsy/failure_modes.json#FM#29"},
-    {"from": "L3", "to": "L3G", "rel": "guarded_by", "provenance_ref": "interaction-autopsy/detectors.json#D1"},
-    {"from": "L4", "to": "L37", "rel": "guarded_by", "provenance_ref": "CHANGELOG.md"},
-    {"from": "L6", "to": "L41", "rel": "guarded_by", "provenance_ref": "interaction-autopsy/failure_modes.json#FM#NEW_02"},
-    {"from": "L2", "to": "D1", "rel": "fires_detector", "provenance_ref": "Visual_Summary.md"},
-    {"from": "L2", "to": "D2", "rel": "fires_detector", "provenance_ref": "Visual_Summary.md"},
-    {"from": "L2", "to": "D3", "rel": "fires_detector", "provenance_ref": "Visual_Summary.md"},
-    {"from": "L2", "to": "D4", "rel": "fires_detector", "provenance_ref": "Visual_Summary.md"},
-    {"from": "L2", "to": "D5", "rel": "fires_detector", "provenance_ref": "Visual_Summary.md"},
-    {"from": "L2", "to": "D6", "rel": "fires_detector", "provenance_ref": "Visual_Summary.md"},
-    {"from": "L2", "to": "D7", "rel": "fires_detector", "provenance_ref": "Visual_Summary.md"},
-    {"from": "L2", "to": "D8", "rel": "fires_detector", "provenance_ref": "Visual_Summary.md"},
-    {"from": "D2", "to": "D5", "rel": "feeds", "provenance_ref": "specs/v4.1-RC/kg_generation_guide.md#step-3-create-enforcement-edges-the-critical-step"},
-    {"from": "D3", "to": "D5", "rel": "feeds", "provenance_ref": "specs/v4.1-RC/kg_generation_guide.md#step-3-create-enforcement-edges-the-critical-step"},
-    {"from": "D3", "to": "L31", "rel": "triggers_high_stakes_mode", "provenance_ref": "specs/v4.1-RC/kg_generation_guide.md#step-3-create-enforcement-edges-the-critical-step"},
-    {"from": "D5", "to": "L16", "rel": "activates_mode", "provenance_ref": "specs/v4.1-RC/kg_generation_guide.md#step-3-create-enforcement-edges-the-critical-step"},
-    {"from": "D5", "to": "L31", "rel": "activates_mode", "provenance_ref": "interaction-autopsy/detectors.json#D5"},
-    {"from": "D1", "to": "L1", "rel": "requires_layer", "provenance_ref": "interaction-autopsy/failure_modes.json#FM#NEW_03"},
-    {"from": "D1", "to": "L3G", "rel": "enforces_gate", "provenance_ref": "interaction-autopsy/detectors.json#D1"},
-    {"from": "D4", "to": "L3G", "rel": "enforces_gate", "provenance_ref": "interaction-autopsy/detectors.json#D4"},
-    {"from": "D6", "to": "L3G", "rel": "enforces_gate", "provenance_ref": "interaction-autopsy/detectors.json#D6"},
-    {"from": "D7", "to": "L2G", "rel": "enforces_gate", "provenance_ref": "interaction-autopsy/detectors.json#D7"},
-    {"from": "D7", "to": "L42", "rel": "requires_layer", "provenance_ref": "interaction-autopsy/detectors.json#D7"},
-    {"from": "D7", "to": "L41", "rel": "enforces_gate", "provenance_ref": "interaction-autopsy/detectors.json#D7"},
-    {"from": "D7", "to": "L4", "rel": "blocks_until_evidence_present", "provenance_ref": "specs/v4.1-RC/generation_rules.md#fail-closed-rule-for-d7_evidence_presence_checker"},
-    {"from": "D8", "to": "L2G", "rel": "enforces_gate", "provenance_ref": "interaction-autopsy/detectors.json#D8"},
-    {"from": "D8", "to": "L9", "rel": "requires_layer", "provenance_ref": "interaction-autopsy/detectors.json#D8"},
-    {"from": "L31", "to": "L37", "rel": "hardens_gate", "provenance_ref": "interaction-autopsy/failure_modes.json#FM#42"},
-    {"from": "L5", "to": "L16", "rel": "applies_layer", "provenance_ref": "Visual_Summary.md"},
-    {"from": "L5", "to": "L43", "rel": "applies_layer", "provenance_ref": "interaction-autopsy/detectors.json"},
-    {"from": "L6", "to": "L42", "rel": "applies_layer", "provenance_ref": "CHANGELOG.md"},
-    {"from": "L6", "to": "V9", "rel": "logs_proof", "provenance_ref": "CHANGELOG.md"}
+    {
+      "from": "LFAS_41",
+      "to": "L2",
+      "rel": "starts_phase",
+      "provenance_ref": "Visual_Summary.md"
+    },
+    {
+      "from": "L2",
+      "to": "L3",
+      "rel": "transitions_to",
+      "provenance_ref": "Visual_Summary.md"
+    },
+    {
+      "from": "L3",
+      "to": "L4",
+      "rel": "transitions_to",
+      "provenance_ref": "Visual_Summary.md"
+    },
+    {
+      "from": "L4",
+      "to": "L5",
+      "rel": "transitions_to",
+      "provenance_ref": "CHANGELOG.md"
+    },
+    {
+      "from": "L5",
+      "to": "L6",
+      "rel": "transitions_to",
+      "provenance_ref": "Visual_Summary.md"
+    },
+    {
+      "from": "L2",
+      "to": "L2G",
+      "rel": "guarded_by",
+      "provenance_ref": "interaction-autopsy/failure_modes.json#FM#29"
+    },
+    {
+      "from": "L3",
+      "to": "L3G",
+      "rel": "guarded_by",
+      "provenance_ref": "interaction-autopsy/detectors.json#D1"
+    },
+    {
+      "from": "L4",
+      "to": "L37",
+      "rel": "guarded_by",
+      "provenance_ref": "CHANGELOG.md"
+    },
+    {
+      "from": "L6",
+      "to": "L41",
+      "rel": "guarded_by",
+      "provenance_ref": "interaction-autopsy/failure_modes.json#FM#NEW_02"
+    },
+    {
+      "from": "L2",
+      "to": "D1",
+      "rel": "fires_detector",
+      "provenance_ref": "Visual_Summary.md"
+    },
+    {
+      "from": "L2",
+      "to": "D2",
+      "rel": "fires_detector",
+      "provenance_ref": "Visual_Summary.md"
+    },
+    {
+      "from": "L2",
+      "to": "D3",
+      "rel": "fires_detector",
+      "provenance_ref": "Visual_Summary.md"
+    },
+    {
+      "from": "L2",
+      "to": "D4",
+      "rel": "fires_detector",
+      "provenance_ref": "Visual_Summary.md"
+    },
+    {
+      "from": "L2",
+      "to": "D5",
+      "rel": "fires_detector",
+      "provenance_ref": "Visual_Summary.md"
+    },
+    {
+      "from": "L2",
+      "to": "D6",
+      "rel": "fires_detector",
+      "provenance_ref": "Visual_Summary.md"
+    },
+    {
+      "from": "L2",
+      "to": "D7",
+      "rel": "fires_detector",
+      "provenance_ref": "Visual_Summary.md"
+    },
+    {
+      "from": "L2",
+      "to": "D8",
+      "rel": "fires_detector",
+      "provenance_ref": "Visual_Summary.md"
+    },
+    {
+      "from": "D2",
+      "to": "D5",
+      "rel": "feeds",
+      "provenance_ref": "specs/v4.1-RC/kg_generation_guide.md#step-3-create-enforcement-edges-the-critical-step"
+    },
+    {
+      "from": "D3",
+      "to": "D5",
+      "rel": "feeds",
+      "provenance_ref": "specs/v4.1-RC/kg_generation_guide.md#step-3-create-enforcement-edges-the-critical-step"
+    },
+    {
+      "from": "D3",
+      "to": "L31",
+      "rel": "triggers_high_stakes_mode",
+      "provenance_ref": "specs/v4.1-RC/kg_generation_guide.md#step-3-create-enforcement-edges-the-critical-step"
+    },
+    {
+      "from": "D5",
+      "to": "L16",
+      "rel": "activates_mode",
+      "provenance_ref": "specs/v4.1-RC/kg_generation_guide.md#step-3-create-enforcement-edges-the-critical-step"
+    },
+    {
+      "from": "D5",
+      "to": "L31",
+      "rel": "activates_mode",
+      "provenance_ref": "interaction-autopsy/detectors.json#D5"
+    },
+    {
+      "from": "D1",
+      "to": "L1",
+      "rel": "requires_layer",
+      "provenance_ref": "interaction-autopsy/failure_modes.json#FM#NEW_03"
+    },
+    {
+      "from": "D1",
+      "to": "L3G",
+      "rel": "enforces_gate",
+      "provenance_ref": "interaction-autopsy/detectors.json#D1"
+    },
+    {
+      "from": "D4",
+      "to": "L3G",
+      "rel": "enforces_gate",
+      "provenance_ref": "interaction-autopsy/detectors.json#D4"
+    },
+    {
+      "from": "D6",
+      "to": "L3G",
+      "rel": "enforces_gate",
+      "provenance_ref": "interaction-autopsy/detectors.json#D6"
+    },
+    {
+      "from": "D7",
+      "to": "L2G",
+      "rel": "enforces_gate",
+      "provenance_ref": "interaction-autopsy/detectors.json#D7"
+    },
+    {
+      "from": "D7",
+      "to": "L42",
+      "rel": "requires_layer",
+      "provenance_ref": "interaction-autopsy/detectors.json#D7"
+    },
+    {
+      "from": "D7",
+      "to": "L41",
+      "rel": "enforces_gate",
+      "provenance_ref": "interaction-autopsy/detectors.json#D7"
+    },
+    {
+      "from": "D7",
+      "to": "L4",
+      "rel": "blocks_until_evidence_present",
+      "provenance_ref": "specs/v4.1-RC/generation_rules.md#fail-closed-rule-for-d7_evidence_presence_checker"
+    },
+    {
+      "from": "D8",
+      "to": "L2G",
+      "rel": "enforces_gate",
+      "provenance_ref": "interaction-autopsy/detectors.json#D8"
+    },
+    {
+      "from": "D8",
+      "to": "L9",
+      "rel": "requires_layer",
+      "provenance_ref": "interaction-autopsy/detectors.json#D8"
+    },
+    {
+      "from": "L31",
+      "to": "L37",
+      "rel": "hardens_gate",
+      "provenance_ref": "interaction-autopsy/failure_modes.json#FM#42"
+    },
+    {
+      "from": "L5",
+      "to": "L16",
+      "rel": "applies_layer",
+      "provenance_ref": "Visual_Summary.md"
+    },
+    {
+      "from": "L5",
+      "to": "L43",
+      "rel": "applies_layer",
+      "provenance_ref": "interaction-autopsy/detectors.json"
+    },
+    {
+      "from": "L6",
+      "to": "L42",
+      "rel": "applies_layer",
+      "provenance_ref": "CHANGELOG.md"
+    },
+    {
+      "from": "L6",
+      "to": "V9",
+      "rel": "logs_proof",
+      "provenance_ref": "CHANGELOG.md"
+    }
   ],
   "failure_modes": [
     {
@@ -290,10 +518,12 @@
       "description": "AI proceeds with assumptions instead of asking clarifying questions when user intent is vague or ambiguous.",
       "severity": "Medium",
       "lfas_violation": "L2_LISTEN_INCOMPLETE",
-      "triggered_by_detector": "D7_EVIDENCE_PRESENCE_CHECKER",
       "prevention_gate": "L2_INPUT_ANALYSIS_GATE",
       "prevention_phase": "LISTEN",
-      "provenance_ref": "interaction-autopsy/failure_modes.json#FM#29"
+      "provenance_ref": "interaction-autopsy/failure_modes.json#FM#29",
+      "related_detectors": [
+        "D7_EVIDENCE_PRESENCE_CHECKER"
+      ]
     },
     {
       "id": "FM#34",
@@ -302,10 +532,12 @@
       "description": "AI interprets user silence, short replies or absence of objection as positive confirmation.",
       "severity": "High",
       "lfas_violation": "L4_WAIT_GATE_BYPASSED",
-      "triggered_by_detector": "D2_VULNERABILITY_DETECTOR",
       "prevention_gate": "L37_SCOPE_CONFIRMATION_GATE",
       "prevention_phase": "WAIT",
-      "provenance_ref": "interaction-autopsy/failure_modes.json#FM#34"
+      "provenance_ref": "interaction-autopsy/failure_modes.json#FM#34",
+      "related_detectors": [
+        "D2_VULNERABILITY_DETECTOR"
+      ]
     },
     {
       "id": "FM#35",
@@ -314,10 +546,12 @@
       "description": "AI closes an interaction before scope confirmation is complete.",
       "severity": "High",
       "lfas_violation": "L37_SCOPE_CONFIRMATION_GATE_BYPASSED",
-      "triggered_by_detector": "D6_LOGIC_CONSISTENCY_CHECKER",
       "prevention_gate": "L37_SCOPE_CONFIRMATION_GATE",
       "prevention_phase": "WAIT",
-      "provenance_ref": "interaction-autopsy/failure_modes.json#FM#35"
+      "provenance_ref": "interaction-autopsy/failure_modes.json#FM#35",
+      "related_detectors": [
+        "D6_LOGIC_CONSISTENCY_CHECKER"
+      ]
     },
     {
       "id": "FM#42",
@@ -326,10 +560,12 @@
       "description": "AI acts on inferred context instead of grounded evidence, bypassing the WAIT gate.",
       "severity": "Critical",
       "lfas_violation": "L4_WAIT_GATE_BYPASSED",
-      "triggered_by_detector": "D3_CRISIS_DETECTOR",
       "prevention_gate": "L37_SCOPE_CONFIRMATION_GATE",
       "prevention_phase": "WAIT",
-      "provenance_ref": "interaction-autopsy/failure_modes.json#FM#42"
+      "provenance_ref": "interaction-autopsy/failure_modes.json#FM#42",
+      "related_detectors": [
+        "D3_CRISIS_DETECTOR"
+      ]
     },
     {
       "id": "FM#NEW_01",
@@ -338,10 +574,12 @@
       "description": "AI drifts from the confirmed objective back into generic helper behaviour across turns.",
       "severity": "Medium",
       "lfas_violation": "L3_REFLECT_DRIFT",
-      "triggered_by_detector": "D6_LOGIC_CONSISTENCY_CHECKER",
       "prevention_gate": "L3_UNDERSTANDING_VERIFICATION_GATE",
       "prevention_phase": "REFLECT",
-      "provenance_ref": "interaction-autopsy/failure_modes.json#FM#NEW_01"
+      "provenance_ref": "interaction-autopsy/failure_modes.json#FM#NEW_01",
+      "related_detectors": [
+        "D6_LOGIC_CONSISTENCY_CHECKER"
+      ]
     },
     {
       "id": "FM#NEW_02",
@@ -350,10 +588,12 @@
       "description": "AI claims compliance or completion without grounding evidence or proof metadata.",
       "severity": "Critical",
       "lfas_violation": "L42_GROUNDING_EVIDENCE_MISSING",
-      "triggered_by_detector": "D7_EVIDENCE_PRESENCE_CHECKER",
       "prevention_gate": "L41_DELIVERABLE_CHECK_GATE",
       "prevention_phase": "ACKNOWLEDGE",
-      "provenance_ref": "interaction-autopsy/failure_modes.json#FM#NEW_02"
+      "provenance_ref": "interaction-autopsy/failure_modes.json#FM#NEW_02",
+      "related_detectors": [
+        "D7_EVIDENCE_PRESENCE_CHECKER"
+      ]
     },
     {
       "id": "FM#NEW_03",
@@ -362,10 +602,12 @@
       "description": "AI masks uncertainty with hedge language instead of explicit probability statements.",
       "severity": "Medium",
       "lfas_violation": "L1_TRANSPARENCY_TIER_INSUFFICIENT",
-      "triggered_by_detector": "D1_PROBABILITY_CLASSIFIER",
       "prevention_gate": "L3_UNDERSTANDING_VERIFICATION_GATE",
       "prevention_phase": "REFLECT",
-      "provenance_ref": "interaction-autopsy/failure_modes.json#FM#NEW_03"
+      "provenance_ref": "interaction-autopsy/failure_modes.json#FM#NEW_03",
+      "related_detectors": [
+        "D1_PROBABILITY_CLASSIFIER"
+      ]
     },
     {
       "id": "FM#NEW_04",
@@ -374,18 +616,56 @@
       "description": "AI normalizes away rare but critical user instructions or corrections.",
       "severity": "Medium",
       "lfas_violation": "L9_AMBIGUITY_ABSORPTION_OVERCORRECTION",
-      "triggered_by_detector": "D8_NOTABILITY_DETECTOR",
       "prevention_gate": "L2_INPUT_ANALYSIS_GATE",
       "prevention_phase": "LISTEN",
-      "provenance_ref": "interaction-autopsy/failure_modes.json#FM#NEW_04"
+      "provenance_ref": "interaction-autopsy/failure_modes.json#FM#NEW_04",
+      "related_detectors": [
+        "D8_NOTABILITY_DETECTOR"
+      ]
     }
   ],
   "state_transition_proof": [
-    {"current_phase": "L2_LISTEN", "next_phase": "L3_REFLECT", "conditions": ["All detectors D1-D8 executed and logged", "L2_INPUT_ANALYSIS_GATE passed"]},
-    {"current_phase": "L3_REFLECT", "next_phase": "L4_WAIT", "conditions": ["Understanding and scope reflected to user", "L3_UNDERSTANDING_VERIFICATION_GATE passed"]},
-    {"current_phase": "L4_WAIT", "next_phase": "L5_ACT", "conditions": ["Explicit affirmative user confirmation received", "L37_SCOPE_CONFIRMATION_GATE passed", "No unresolved D7 evidence gap"]},
-    {"current_phase": "L5_ACT", "next_phase": "L6_ACKNOWLEDGE", "conditions": ["Output produced within confirmed scope", "All activated layers applied"]},
-    {"current_phase": "L6_ACKNOWLEDGE", "next_phase": "L2_LISTEN", "conditions": ["L41_DELIVERABLE_CHECK_GATE passed", "V9 state-proof metadata logged"]}
+    {
+      "current_phase": "L2_LISTEN",
+      "next_phase": "L3_REFLECT",
+      "conditions": [
+        "All detectors D1-D8 executed and logged",
+        "L2_INPUT_ANALYSIS_GATE passed"
+      ]
+    },
+    {
+      "current_phase": "L3_REFLECT",
+      "next_phase": "L4_WAIT",
+      "conditions": [
+        "Understanding and scope reflected to user",
+        "L3_UNDERSTANDING_VERIFICATION_GATE passed"
+      ]
+    },
+    {
+      "current_phase": "L4_WAIT",
+      "next_phase": "L5_ACT",
+      "conditions": [
+        "Explicit affirmative user confirmation received",
+        "L37_SCOPE_CONFIRMATION_GATE passed",
+        "No unresolved D7 evidence gap"
+      ]
+    },
+    {
+      "current_phase": "L5_ACT",
+      "next_phase": "L6_ACKNOWLEDGE",
+      "conditions": [
+        "Output produced within confirmed scope",
+        "All activated layers applied"
+      ]
+    },
+    {
+      "current_phase": "L6_ACKNOWLEDGE",
+      "next_phase": "L2_LISTEN",
+      "conditions": [
+        "L41_DELIVERABLE_CHECK_GATE passed",
+        "V9 state-proof metadata logged"
+      ]
+    }
   ],
   "rules": [
     {
@@ -427,7 +707,11 @@
   ],
   "metadata": {
     "canonical": true,
-    "consumers": ["scenario KG generators", "LFAS compliance auditors", "interaction-autopsy module"],
+    "consumers": [
+      "scenario KG generators",
+      "LFAS compliance auditors",
+      "interaction-autopsy module"
+    ],
     "generation_rules": [
       "specs/v4.1-RC/kg_generation_guide.md",
       "specs/v4.1-RC/generation_rules.md"

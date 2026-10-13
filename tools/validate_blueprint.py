@@ -18,6 +18,8 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_BLUEPRINTS = [REPO_ROOT / "specs" / "v4.1-RC" / "blueprint.json"]
 SCHEMA_FILENAME = "blueprint.schema.json"
 
+CONTROL_NODE_TYPES = {"Gate", "Layer", "Mode", "Phase"}
+
 
 def load_json(path: Path) -> tuple[dict | None, list[str]]:
     try:
@@ -45,8 +47,18 @@ def schema_errors(blueprint: dict, schema: dict) -> list[str]:
     return errors
 
 
-def reference_errors(blueprint: dict) -> list[str]:
+def _as_list(value) -> list:
+    if value is None:
+        return []
+    if isinstance(value, list):
+        return value
+    return [value]
+
+
+def reference_errors(blueprint: dict) -> tuple[list[str], list[str]]:
     errors: list[str] = []
+    warnings: list[str] = []
+
     nodes = blueprint.get("nodes", [])
     ids = [node.get("id") for node in nodes]
     names = {node.get("name") for node in nodes}
@@ -64,44 +76,70 @@ def reference_errors(blueprint: dict) -> list[str]:
                 errors.append(f"edges/{index}: '{side}' references unknown node id '{endpoint}'")
 
     failure_mode_ids = {fm.get("id") for fm in blueprint.get("failure_modes", [])}
+
+    detector_to_fms: dict[str, set[str]] = {}
     for node in nodes:
+        node_id = node.get("id")
+        node_type = node.get("type")
+        node_name = node.get("name")
+
         for gate in node.get("gates", []):
             if gate not in names:
-                errors.append(f"nodes/{node.get('id')}: gate '{gate}' is not a node in this graph")
-            elif name_to_node.get(gate, {}).get("type") != "Gate":
-                errors.append(
-                    f"nodes/{node.get('id')}: gate '{gate}' is not a Gate node"
-                )
-        for fm_id in node.get("detects_failure_modes", []):
+                errors.append(f"nodes/{node_id}: gate '{gate}' is not a node in this graph")
+            elif name_to_node.get(gate, {}).get("type") not in CONTROL_NODE_TYPES:
+                errors.append(f"nodes/{node_id}: gate '{gate}' is not a control node")
+
+        related_fms = _as_list(node.get("related_failure_modes"))
+        for fm_id in related_fms:
             if fm_id not in failure_mode_ids:
                 errors.append(
-                    f"nodes/{node.get('id')}: detects unknown failure mode '{fm_id}'"
+                    f"nodes/{node_id}: related_failure_modes contains unknown failure mode '{fm_id}'"
                 )
 
+        if node_type == "Detector" and node_name:
+            detector_to_fms[node_name] = set(related_fms)
+
+    fm_to_detectors: dict[str, set[str]] = {}
     for fm in blueprint.get("failure_modes", []):
-        detector_name = fm.get("triggered_by_detector")
-        if detector_name not in names:
-            errors.append(
-                f"failure_modes/{fm.get('id')}: triggered_by_detector "
-                f"'{detector_name}' is not a node in this graph"
-            )
-        elif name_to_node.get(detector_name, {}).get("type") != "Detector":
-            errors.append(
-                f"failure_modes/{fm.get('id')}: triggered_by_detector "
-                f"'{detector_name}' is not a Detector node"
-            )
+        fm_id = fm.get("id")
+        related_detectors = _as_list(fm.get("related_detectors"))
+
+        for det_name in related_detectors:
+            if det_name not in names:
+                errors.append(
+                    f"failure_modes/{fm_id}: related_detectors entry '{det_name}' is not a node in this graph"
+                )
+            elif name_to_node.get(det_name, {}).get("type") != "Detector":
+                errors.append(
+                    f"failure_modes/{fm_id}: related_detectors entry '{det_name}' is not a Detector node"
+                )
+
+        fm_to_detectors[fm_id] = set(related_detectors)
 
         prevention_gate = fm.get("prevention_gate")
         if prevention_gate not in names:
             errors.append(
-                f"failure_modes/{fm.get('id')}: prevention_gate "
-                f"'{prevention_gate}' is not a node in this graph"
+                f"failure_modes/{fm_id}: prevention_gate '{prevention_gate}' is not a node in this graph"
             )
         elif name_to_node.get(prevention_gate, {}).get("type") != "Gate":
             errors.append(
-                f"failure_modes/{fm.get('id')}: prevention_gate "
-                f"'{prevention_gate}' is not a Gate node"
+                f"failure_modes/{fm_id}: prevention_gate '{prevention_gate}' is not a Gate node"
             )
+
+    for det_name, fm_set in detector_to_fms.items():
+        for fm_id in fm_set:
+            if fm_id in fm_to_detectors and det_name not in fm_to_detectors[fm_id]:
+                warnings.append(
+                    f"asymmetry: detector '{det_name}' lists '{fm_id}' "
+                    f"but failure_mode '{fm_id}' does not list '{det_name}'"
+                )
+    for fm_id, det_set in fm_to_detectors.items():
+        for det_name in det_set:
+            if det_name in detector_to_fms and fm_id not in detector_to_fms[det_name]:
+                warnings.append(
+                    f"asymmetry: failure_mode '{fm_id}' lists '{det_name}' "
+                    f"but detector '{det_name}' does not list '{fm_id}'"
+                )
 
     for phase in blueprint.get("phases", []):
         if phase not in names:
@@ -122,7 +160,7 @@ def reference_errors(blueprint: dict) -> list[str]:
                     f"'{transition.get(side)}' is not a Phase node"
                 )
 
-    return errors
+    return errors, warnings
 
 
 def provenance_errors(blueprint: dict) -> list[str]:
@@ -164,17 +202,19 @@ def provenance_errors(blueprint: dict) -> list[str]:
     return errors
 
 
-def validate(path: Path) -> list[str]:
+def validate(path: Path) -> tuple[list[str], list[str]]:
     blueprint, errors = load_json(path)
     if blueprint is None:
-        return errors
+        return errors, []
 
     schema_path = path.parent / SCHEMA_FILENAME
     schema, schema_load_errors = load_json(schema_path)
     if schema is None:
-        return schema_load_errors
+        return schema_load_errors, []
 
-    return schema_errors(blueprint, schema) + reference_errors(blueprint) + provenance_errors(blueprint)
+    ref_errs, warnings = reference_errors(blueprint)
+    all_errors = schema_errors(blueprint, schema) + ref_errs + provenance_errors(blueprint)
+    return all_errors, warnings
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -190,7 +230,7 @@ def main(argv: list[str] | None = None) -> int:
 
     failed = False
     for path in paths:
-        errors = validate(path)
+        errors, warnings = validate(path)
         if errors:
             failed = True
             print(f"FAIL {path}", file=sys.stderr)
@@ -198,6 +238,8 @@ def main(argv: list[str] | None = None) -> int:
                 print(f"  - {error}", file=sys.stderr)
         else:
             print(f"OK   {path}")
+        for warning in warnings:
+            print(f"WARN {warning}", file=sys.stderr)
 
     return 1 if failed else 0
 
