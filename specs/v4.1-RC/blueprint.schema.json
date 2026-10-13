@@ -2,7 +2,7 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://github.com/LFASProtocol/LFAS-protocol-v4.1-RC_Official/specs/v4.1-RC/blueprint.schema.json",
   "title": "LFAS Master Knowledge Graph Blueprint Schema",
-  "description": "Validation schema for specs/<version>/blueprint.json, the canonical machine-readable LFAS master graph.",
+  "description": "Validation schema for specs/<version>/blueprint.json, the canonical machine-readable LFAS master graph. Note: 'gates' contains control-node references (Gate, Layer, Mode, or Phase). Consider renaming to 'control_nodes' in future schema revisions.",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -89,8 +89,8 @@
           "name": {"$ref": "#/definitions/nodeName"},
           "description": {"type": "string", "minLength": 1},
           "phase": {"$ref": "#/definitions/phaseName"},
-          "gates": {"type": "array", "items": {"$ref": "#/definitions/nodeName"}},
-          "detects_failure_modes": {
+          "gates": {"type": "array", "items": {"$ref": "#/definitions/nodeName"}, "description": "Control-node references (Gate, Layer, Mode or Phase)."},
+          "related_failure_modes": {
             "type": "array",
             "items": {"$ref": "#/definitions/failureModeId"}
           },
@@ -101,7 +101,7 @@
           {
             "if": {"properties": {"type": {"const": "Detector"}}, "required": ["type"]},
             "then": {
-              "required": ["gates", "phase", "detects_failure_modes"],
+              "required": ["gates", "phase", "related_failure_modes"],
               "properties": {
                 "id": {"type": "string", "pattern": "^D[1-8]$"},
                 "name": {"$ref": "#/definitions/detectorName"}
@@ -146,7 +146,7 @@
           "description",
           "severity",
           "lfas_violation",
-          "triggered_by_detector",
+          "related_detectors",
           "prevention_gate",
           "prevention_phase"
         ],
@@ -157,7 +157,7 @@
           "description": {"type": "string", "minLength": 1},
           "severity": {"type": "string", "enum": ["Low", "Medium", "High", "Critical"]},
           "lfas_violation": {"type": "string", "pattern": "^L[0-9]{1,2}_[A-Z_]+$"},
-          "triggered_by_detector": {"$ref": "#/definitions/detectorName"},
+          "related_detectors": {"type": "array", "items": {"$ref": "#/definitions/detectorName"}},
           "prevention_gate": {"$ref": "#/definitions/nodeName"},
           "prevention_phase": {"$ref": "#/definitions/phaseName"},
           "provenance_ref": {"type": "string", "minLength": 1}
